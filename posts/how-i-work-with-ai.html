@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I build with AI: a 9-step loop, from first question to weekly review · Yu Han Tey</title>
+<meta name="description" content="AI can read twenty papers in the time I read one. The bottleneck is no longer speed, it's whether I understand. The rules and the loop I use to build AI agent memory with AI. By Yu Han Tey, AI agent engineer in Singapore.">
+<link rel="canonical" href="https://yuhantey.github.io/posts/how-i-work-with-ai.html">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How I build with AI: a 9-step loop, from first question to weekly review",
+  "datePublished": "2026-10-18",
+  "author": {
+    "@type": "Person",
+    "name": "Yu Han Tey",
+    "url": "https://yuhantey.github.io/",
+    "jobTitle": "AI Agent Engineer",
+    "address": { "@type": "PostalAddress", "addressLocality": "Singapore" }
+  },
+  "about": ["AI-assisted software engineering", "AI agent memory", "LLM evaluation"],
+  "mainEntityOfPage": "https://yuhantey.github.io/posts/how-i-work-with-ai.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do you stop AI from writing in jargon?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Give it fixed writing rules: give an example before the name of a thing, spell out every abbreviation, one idea per sentence, and sources at the end. Ask for a diagram whenever there is a structure or a sequence, even a quick ASCII diagram."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should an AI engineer let AI do, and what should they keep?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Let AI do the reading, the first drafts of code, and the repetitive testing. Keep the decisions and the product taste: which trade-off to accept, what the system must never do, what will feel right to the user, and whether a result is good enough to ship."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do systems built with AI keep getting the same bugs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In my case, most repeat bugs were not badly worded prompts. Only about 1 in 7 was. The rest came from patching symptoms instead of causes, testing a fix only on its own bug, missing a second path for the same data, tests that don't follow real use, and failures that stay silent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you know when to stop researching and start building?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Stop when the next paper can't change your choice. If you're still unsure between two designs, stop reading and test: write a hypothesis, build both versions with AI, and let an ablation decide."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<main>
+<nav><a href="../">Yu Han Tey</a></nav>
+<div class="kicker">Building AI agent memory</div>
+<h1>How I build with AI: a 9-step loop, from first question to weekly review</h1>
+<div class="meta">Yu Han Tey · 18 October 2026 · 6 min read</div>
+
+<p class="lead">I build memory for an AI assistant: what it remembers about each user, and how that memory gets updated. I build it mostly with AI.</p>
+<p class="lead">AI can read twenty papers in the time it takes me to read one. So speed is no longer the bottleneck. My understanding is.</p>
+
+<div class="answer">
+<div class="label">Short answer</div>
+<p>I write what the system should do. AI reads, drafts and tests. I keep the decisions.</p>
+<p>To make decisions fast, I make AI explain things the way a good textbook does: example first, plain words, a diagram instead of a paragraph.</p>
+</div>
+
+<h2><span class="sec">01</span>AI often explains things in jargon</h2>
+
+<p>Ask AI to summarise ten papers on agent memory, and you get sentences like the one on the left. Every word is correct. I still can't tell what happens.</p>
+
+<div class="compare">
+<div class="card before"><span class="label">What AI writes</span>
+<p>The consolidation stage merges admitted, source-linked clusters into atomic statements, with lifecycle-scoped deduplication.</p>
+</div>
+<div class="card after"><span class="label">What I need</span>
+<p>Tonight, three new facts passed review: "avoids nuts", "doesn't eat nuts", "is planning a trip to Tokyo".</p>
+<p>The first two say the same thing, so they become one memory. The third stays on its own.</p>
+<p class="muted small">This step is called consolidation.</p>
+</div>
+</div>
+
+<p>One day I asked my AI assistant, in frustration: you were trained on more books than any person could read, so why can't you explain things as clearly as a good book does?</p>
+
+<p>I'm not the only one. One developer had to ask three times before their assistant spelled out an abbreviation. And one write-up points out that a fixed bug can end up harder to understand than the bug itself, because the final answer retells the whole investigation instead of the result.</p>
+<p>This isn't one tool's fault. Most models write like this by default, and it's easy to fix once you tell them how you want to read.</p>
+
+<p class="insight">The problem isn't too much information. It's steps that are too big.</p>
+
+<p>AI jumps from a fact to its conclusion. A person needs the steps in between. Often the idea itself wasn't hard. I was stuck on understanding what the AI had just told me.</p>
+
+<h2><span class="sec">02</span>My rules for anything AI writes for me</h2>
+
+<p>These live in the instructions my coding assistant reads at the start of every session.</p>
+
+<ol class="rules">
+<li><b>Example first, name second</b>First: "a student memorises last year's exam, scores 100 on it, and fails a new one." Then: "this is called overfitting."</li>
+<li><b>No abbreviations</b>Write the full name, and explain it in one plain sentence right there.</li>
+<li><b>One idea per sentence</b>If a sentence needs to be read twice, split it.</li>
+<li><b>Sources at the end</b>No "(Author, 2024)" in the middle of a sentence.</li>
+<li><b>A diagram beats a paragraph</b>Anything with steps, order or structure gets a picture. In a chat, even a quick ASCII diagram:
+<pre><code>chat → pull out facts → review → merge → memory</code></pre></li>
+<li><b>Show the original</b>When AI tells me what a paper or file says, it quotes the actual line first. Without this, AI sometimes explains its own reading of the text, not what the text says.</li>
+<li class="wide"><b>Three reasons it could be wrong</b>Every recommendation ends with three real ways it might fail, because the first obvious answer is not always the best one.</li>
+</ol>
+
+<p>Hard terms still get used. If I'll meet a word like "held-out set" elsewhere, I want to learn it. I just want the example first.</p>
+
+<h2><span class="sec">03</span>My loop</h2>
+
+<ol class="loop">
+<li class="me"><span class="dot">1</span><div class="title">Seven questions <span class="who">AI asks · I answer</span></div>
+<div class="desc">Most people ask AI questions. Here I make AI ask <b>me</b>. On every new project, my assistant won't start until I answer seven questions, and it pushes back on vague answers:</div>
+<ol class="q7">
+<li>Who has the problem?</li>
+<li>How painful is it?</li>
+<li>How do they handle it today?</li>
+<li>Which number should get better?</li>
+<li>What is the smallest version that is still useful?</li>
+<li>How will we test it?</li>
+<li>What has to be true before it goes live?</li>
+</ol>
+<div class="desc">It's practice. I want to think this way without being asked.</div></li>
+<li class="me"><span class="dot">2</span><div class="title">Expected behaviour <span class="who">Me</span></div>
+<div class="desc">Before any research, I write <b>what the system should do</b>. For memory, my goal is one line: <b>remember what is worth remembering about the user, and nothing else.</b></div>
+<div class="desc">Memory gets written in two ways:</div>
+<table class="mini">
+<tr><td>Explicit</td><td>The user asks directly: "Remember that I'm vegetarian." It is saved right away.</td></tr>
+<tr><td>Nightly</td><td>The assistant notices on its own. The user asked for nut-free recipes in three different chats, so overnight it saves "avoids nuts". This is sometimes called <i>dreaming</i>.</td></tr>
+</table>
+<div class="desc">Then I turn the goal into small examples, with the answer I expect:</div>
+<table class="mini cases">
+<tr><th>User says</th><th>Expected</th></tr>
+<tr><td>"I'm vegetarian."</td><td>Remember it.</td></tr>
+<tr><td>"Make this one spicy."</td><td>Don't remember. It's for this recipe only.</td></tr>
+<tr><td>"Hi."</td><td>Nothing to remember.</td></tr>
+<tr><td>"I eat fish now." (memory says "is vegetarian")</td><td>Change the memory to "eats fish, but no other meat". Don't just delete it, or the assistant may start suggesting steak.</td></tr>
+</table>
+<div class="desc">Each example later becomes a test case.</div></li>
+<li class="ai"><span class="dot">3</span><div class="title">Research <span class="who">AI</span></div>
+<div class="desc">AI finds papers and engineering blogs, and turns them into <b>one HTML page</b>: each approach as a diagram, its trade-offs in plain words. I read the page, not the twenty papers.</div></li>
+<li class="me"><span class="dot">4</span><div class="title">Decide <span class="who">Me</span></div>
+<div class="desc">AI lists the decisions that need a human. <b>I make them</b>, and write down what the system must never do.</div></li>
+<li class="me"><span class="dot">5</span><div class="title">Hypothesis <span class="who">Me</span></div>
+<div class="desc">Not one guess, but <b>several competing ones</b>: which option should win, and why. All written down <b>before</b> any test runs, so the test can prove me wrong.</div></li>
+<li class="ai"><span class="dot">6</span><div class="title">Eval <span class="who">AI drafts · I judge</span></div>
+<div class="desc">I don't write every test case myself. AI writes them from my examples in step 2, with the answer it expects, and <b>marks the ones it isn't sure about</b>. I answer those first, then check the rest.</div>
+<div class="desc">Last time, AI wrote 54 cases and flagged 13. I answered the 13 and checked the other 41. Answers a person has checked are called <b>gold</b>; answers only AI has written are <b>silver</b>.</div>
+<div class="desc"><b>Then AI compares the options.</b> Say there are three ways to merge memories. All three take the same test, and we compare scores.</div>
+<div class="desc"><b>Then it takes parts away.</b> If an option has two parts, run it again without one of them. If the score doesn't drop, that part wasn't helping.</div>
+<div class="desc"><b>One rule:</b> the answers are set before the test, like a teacher's answer key. Nobody changes them after seeing the results, even when the model gets one wrong.</div></li>
+<li class="ai"><span class="dot">7</span><div class="title">Build and test <span class="who">AI</span></div>
+<div class="desc">AI writes the code, runs end-to-end tests from <b>my expected behaviour in step 2</b>, and tries many odd inputs fast.</div></li>
+<li class="me"><span class="dot">8</span><div class="title">Ship <span class="who">Me</span></div>
+<div class="desc">The call is mine, but numbers make it. I ship when three things hold:</div>
+<table class="mini">
+<tr><td>Eval</td><td>The score on the held-out cases doesn't drop, and there are no harmful mistakes, like deleting or inventing a memory.</td></tr>
+<tr><td>End-to-end</td><td>Every example from step 2 behaves as expected in the test environment. AI runs them in a real browser and saves a screenshot or a short video of each, so I can check with my own eyes, not just read "passed".</td></tr>
+<tr><td>After launch</td><td>One number to watch. For memory: how often users delete a memory the assistant saved.</td></tr>
+</table></li>
+<li class="ai"><span class="dot">9</span><div class="title">Keep checking, keep exploring <span class="who">AI</span></div>
+<div class="desc">AI changes every month. New models, new papers, new tricks. A design that was best in spring may not be best in autumn.</div>
+<div class="desc">So a few jobs run on their own:</div>
+<table class="mini">
+<tr><td>Check</td><td>Re-run the tests and evals. I look at what broke.</td></tr>
+<tr><td>Explore</td><td>Collect new memory papers and engineering blogs, pick the most promising, try it against our evals, and report whether it beats what we have. I decide whether to adopt it.</td></tr>
+<tr><td>Reflect</td><td>AI summarises everything I merged that week into my notes app: what broke, why, how it was fixed. I read it and look for fixes that keep coming back. Each lesson goes to one of two places: my coding assistant's memory and skills, so it doesn't repeat the mistake, or my own checklist.</td></tr>
+<tr><td>Prune</td><td>Once a month, AI reviews my assistant's own rules and memories. It merges duplicates and removes outdated ones, after taking a backup, and asks me about the rest. One question for every new rule: did it come from a one-off mistake, or one that keeps happening? One-offs don't earn a rule. Too many rules confuse the assistant.</td></tr>
+</table></li>
+</ol>
+
+<div class="terms">
+<div><b>Held-out set:</b> test cases I don't look at while improving the prompt. If a fix only works on the cases I looked at, the held-out set catches it.</div>
+<div><b>Removing one part at a time:</b> if a design has three parts, run it without each one. If the score doesn't drop, that part isn't helping. This is called an ablation.</div>
+</div>
+
+<h2><span class="sec">04</span>The ideas behind the loop</h2>
+
+<ol class="rules">
+<li><b>Never ship the first answer</b>The first answer is just the first one. Step 6 compares several options, and removes one part at a time to see what actually helps. That second part is called an ablation. AI makes this cheap: it can write three versions in the time I used to write one.</li>
+<li><b>Don't defend an idea, test it</b>I'm not attached to my first idea. I start with several competing guesses, look for evidence against my favourite, and drop it when the test says so. Every AI recommendation ends with three reasons it could fail, for the same reason.</li>
+<li><b>Tests should look like real use</b>A test that is easier than real life will pass and prove nothing. That's why end-to-end checks run in a real browser, with screenshots I look at myself.</li>
+<li><b>Check the question before the answer</b>A good answer to the wrong question is wasted work. That's what the seven questions in step 1 are for.</li>
+<li><b>A number before any change</b>Otherwise "it's better now" is a feeling.</li>
+<li><b>Explain it back</b>Before I accept a design, I explain it in my own words. If I can't, I ask for an example until I can.</li>
+<li class="wide"><b>A rule for when to stop researching</b>AI can always find one more paper, so research never stops by itself. My rule: stop when the next paper can't change my choice. Say I'm choosing between design A and design B, and A is ahead. If nothing I could still read would make me pick B, I stop and build A. Often the fastest way out is to stop reading and test: write down a hypothesis, build both versions with AI, and run an ablation. The result decides, not the next paper.</li>
+</ol>
+
+<h2><span class="sec">05</span>What went wrong before the loop</h2>
+
+<p>These happened before I worked this way. They are a big part of why the loop looks the way it does.</p>
+
+<div class="story">
+<h3>Every fix passed its tests. Together, one broke another.</h3>
+<p>AI makes fixes fast. In one week I merged dozens of fixes to the memory system, 15 of them on a single day. Each one passed its own tests.</p>
+<p>One fix taught the system a new rule: if a new preference contradicts an old one, remove the old one. Its tests were all about contradictions, and they passed.</p>
+<p>The next day, a user changed one memory from "suggest chicken recipes" to "suggest fish recipes". A different memory, "cooks fish every Friday", disappeared.</p>
+<pre><code>Before                        After the new rule
+"suggest chicken recipes"  →  "suggest fish recipes"
+"cooks fish every Friday"  →  (gone)
+
+Why: both mention "fish", so the rule read it as a replacement.</code></pre>
+<p>The new rule had compared the whole list. It saw two memories about fish and decided one replaced the other. They didn't contradict at all.</p>
+<p>The fix was right for the problem it was built for. Nobody tested it against its neighbours.</p>
+<p class="lesson">Related changes have to be tested together. Fast merging hides this, because every single change looks green.</p>
+</div>
+
+
+<div class="story">
+<h3>I let AI do the reading, and almost the thinking</h3>
+<p>AI found how other memory systems solve a problem, and the answer looked clear. But when I closed the page, could I explain <i>why</i> they do it that way?</p>
+<p>Not always.</p>
+<p class="lesson">That is the line between using AI and handing over the decision.</p>
+</div>
+
+<h2><span class="sec">06</span>Why the same bugs kept coming back when I vibe coded</h2>
+
+<p>Back then I was vibe coding: AI wrote the code, and I trusted it fully without checking much myself. The weekly notes showed what that cost. In five weeks I fixed 103 bugs. 70 of them were repeats: the same root cause, back in a new form. Every repeat meant another pull request.</p>
+
+<p>Other developers describe the same loop, and it shows up across many popular coding tools. In one team, a bug had been "fixed" three times, each time with green tests, while the real cause stayed untouched. The agent was right that the symptom would go away. It was wrong about why.</p>
+
+<p>So I went back and sorted every bug by its root cause. The repeats came from five habits:</p>
+
+<ol class="rules">
+<li><b>I patched the symptom, not the cause</b>One problem took 11 pull requests before I found the real cause: a single setting.</li>
+<li><b>A fix was tested only on its own bug</b>So it broke something next to it, and that became the next bug.</li>
+<li><b>I fixed one path and missed the others</b>The same data could come in through a second door I hadn't checked.</li>
+<li><b>Tests didn't take the path real use takes</b>So a fix passed its test while the bug was still there.</li>
+<li class="wide"><b>Failures were silent</b>Problems showed up late and one at a time, so each one became its own fix.</li>
+</ol>
+
+<p class="insight">Only about 1 in 7 repeats was a badly worded prompt.</p>
+
+<p>Most came from not thinking a case through. So I changed where I spend my time: less on rewording prompts, more on listing what could go wrong before AI writes any code.</p>
+
+<h2><span class="sec">07</span>How I stop the repeats</h2>
+
+<div class="fixmap">
+<div class="fm-row"><div class="fm-cause">I patched the symptom</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Find the cause first</b><span>If the same thing needs a second fix, I stop asking AI for another patch. It finds the root cause and shows me the evidence.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Tested a fix only on its own bug</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Test the neighbours</b><span>A rule that removes things also gets cases that look similar but must stay.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Fixed one path, missed the others</div><div class="fm-arrow">→</div><div class="fm-fix"><b>List every path first</b><span>Every place the data can get in, not just the one that broke.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Tests didn't follow real use</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Test the way it really runs</b><span>Same path as real use. End-to-end in a real browser, with screenshots.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Failures were silent</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Make every failure loud</b><span>Marked as an error, with the reason. All errors at once.</span></div></div>
+</div>
+<p>And one rule over all of them: every old bug becomes a test, and every change runs the whole set.</p>
+
+<h2><span class="sec">08</span>What's next</h2>
+<p>The "explore" job in step 9 is next. First, a one-time map of where our design is behind recent research. Then the weekly job: up to three new ideas, each tried against our evals.</p>
+<p>The goal is the same as everything above. AI does more of the work, and I still understand every decision.</p>
+
+<h2><span class="sec">09</span>Where I could be wrong</h2>
+<ol class="rules">
+<li><b>Five weeks, one system</b>These numbers come from one memory system and one person's bug notes. Another team may see something else.</li>
+<li><b>"Prompt" or "thinking" is my call</b>Some fixes changed what the model is given, not how the prompt is worded. Count those as prompt problems, and prompts become about 1 in 3 repeats. Still not the biggest group.</li>
+<li class="wide"><b>The loop is heavy</b>Nine steps make sense for something real users depend on. For a quick script or a throwaway prototype, plain vibe coding is probably fine.</li>
+</ol>
+
+<h2><span class="sec">10</span>FAQ</h2>
+<h3>How do you stop AI from writing in jargon?</h3>
+<p>Give it fixed writing rules: give an example before the name of a thing, spell out every abbreviation, one idea per sentence, and sources at the end. Ask for a diagram whenever there is a structure or a sequence, even a quick ASCII diagram.</p>
+<h3>What should an AI engineer let AI do, and what should they keep?</h3>
+<p>Let AI do the reading, the first drafts of code, and the repetitive testing. Keep the decisions and the product taste: which trade-off to accept, what the system must never do, what will feel right to the user, and whether a result is good enough to ship.</p>
+
+<h3>Why do systems built with AI keep getting the same bugs?</h3>
+<p>In my case, most repeat bugs were not badly worded prompts. Only about 1 in 7 was. The rest came from patching symptoms instead of causes, testing a fix only on its own bug, missing a second path for the same data, tests that don't follow real use, and failures that stay silent.</p>
+<h3>How do you know when to stop researching and start building?</h3>
+<p>Stop when the next paper can't change your choice. If you're still unsure between two designs, stop reading and test: write a hypothesis, build both versions with AI, and let an ablation decide.</p>
+
+<h2><span class="sec">11</span>Sources</h2>
+<ul class="small">
+<li>A fixed bug harder to understand than the bug: <a href="https://aiidelist.com/blog/make-ai-coding-agents-explain-code-clearly.md">AI Coding Agents Can Fix the Bug — So Why Are Their Explanations So Hard to Understand?</a> (2 October 2026)</li>
+<li>Asking three times for an abbreviation: <a href="https://claudeissues.com/issue/29769-claude-code-over-explains-and-talks-past-direct-questions-instead-of-answering-t">a public bug report</a></li>
+<li>A bug "fixed" three times: <a href="https://tianpan.co/blog/2026/05/02/agentic-debugger-trap-symptom-vs-root-cause">The Agentic Debugger's Trap</a>, Tian Pan (2 May 2026)</li>
+<li>The same loop across many coding tools: <a href="https://www.freecodecamp.org/news/how-to-break-the-ai-coding-agent-fix-loop/">How to Break the AI Coding Agent Fix Loop</a>, freeCodeCamp (5 October 2026)</li>
+<li>103 bugs, 70 repeats: my own bug notes, September to October 2026 (private)</li>
+</ul>
+
+<footer>© 2026 Yu Han Tey · <a href="../">Home</a></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Allow search engines and AI search crawlers.
+User-agent: *
+Allow: /
+
+Sitemap: https://yuhantey.github.io/sitemap.xml
