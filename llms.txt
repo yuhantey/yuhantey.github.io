@@ -13,3 +13,4 @@
 
 ## Links
 - GitHub: https://github.com/yuhantey
+- DEV: https://dev.to/yuhantey
