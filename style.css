@@ -190,3 +190,7 @@ ol.q7 li { break-inside: avoid; margin: .2em 0; }
   .fm-row { grid-template-columns: 1fr; }
   .fm-arrow { transform: rotate(90deg); height: 22px; }
 }
+table.ba td:first-child { color: var(--muted); font-weight: 600; white-space: nowrap; }
+table.ba td:nth-child(2) { color: var(--bad); }
+table.ba td:nth-child(3) { color: var(--me); }
+@media (max-width: 640px) { table.ba td:first-child { white-space: normal; } }

@@ -82,6 +82,17 @@
 <p>To make decisions fast, I make AI explain things the way a good textbook does: example first, plain words, a diagram instead of a paragraph.</p>
 </div>
 
+<h3>Before and after the loop</h3>
+<table class="ba">
+<tr><th></th><th>Before: vibe coding</th><th>After: the loop</th></tr>
+<tr><td>Who decides</td><td>AI wrote it, I trusted it</td><td>AI drafts, I decide, with a number</td></tr>
+<tr><td>Starting point</td><td>A vague ask</td><td>Seven questions and expected behaviour, written first</td></tr>
+<tr><td>Bugs</td><td>103 in five weeks; 70 were repeats</td><td>Each old bug is a test; every change runs all of them</td></tr>
+<tr><td>Fixing</td><td>One problem took 11 pull requests</td><td>Second fix on the same thing → find the root cause first</td></tr>
+<tr><td>Testing</td><td>Each fix passed its own tests, and broke a neighbour</td><td>Neighbour cases, held-out cases, real browser runs</td></tr>
+<tr><td>Reading research</td><td>Long AI summaries I couldn't follow</td><td>One plain page with diagrams; a rule for when to stop. I understand a new topic in one sitting instead of several.</td></tr>
+</table>
+
 <h2><span class="sec">01</span>AI often explains things in jargon</h2>
 
 <p>Ask AI to summarise ten papers on agent memory, and you get sentences like the one on the left. Every word is correct. I still can't tell what happens.</p>
@@ -267,9 +278,8 @@ Why: both mention "fish", so the rule read it as a replacement.</code></pre>
 
 <h2><span class="sec">09</span>Where I could be wrong</h2>
 <ol class="rules">
-<li><b>Five weeks, one system</b>These numbers come from one memory system and one person's bug notes. Another team may see something else.</li>
 <li><b>"Prompt" or "thinking" is my call</b>Some fixes changed what the model is given, not how the prompt is worded. Count those as prompt problems, and prompts become about 1 in 3 repeats. Still not the biggest group.</li>
-<li class="wide"><b>The loop is heavy</b>Nine steps make sense for something real users depend on. For a quick script or a throwaway prototype, plain vibe coding is probably fine.</li>
+<li><b>The loop is heavy</b>Nine steps make sense for something real users depend on. For a quick script or a throwaway prototype, plain vibe coding is probably fine.</li>
 </ol>
 
 <h2><span class="sec">10</span>FAQ</h2>
