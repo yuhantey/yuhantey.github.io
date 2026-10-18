@@ -30,7 +30,7 @@
 <p>I build AI agents that remember things about their users, and the tests that show whether they get it right.</p>
 <p>Most of my work is on:</p>
 <ul>
-<li><b>Agent memory</b>: what an assistant should save, update, merge or forget.</li>
+<li><b>Agent memory</b>: built a memory system end to end. It decides during a chat what is worth keeping, runs a nightly job that merges and updates memories, lets users correct them, and imports memories from other AI assistants. Most steps have their own eval, so a change in one step can't quietly break another.</li>
 <li><b>LLM evaluation and observability</b>: tools to replay a failed run step by step and label what went wrong, so debugging takes minutes instead of hours. Model judges that score conversations against a checklist, so quality is measured, not guessed.</li>
 <li><b>Agent skill design and evals</b>: laying out skills so an agent opens the right ones, then testing two things separately: did it pick the right skill, and did the answer actually get better.</li>
 </ul>
