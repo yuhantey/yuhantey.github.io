@@ -1,12 +1,12 @@
 # Yu Han Tey
 
-> Yu Han Tey is an AI agent engineer based in Singapore. Yu Han works on agent memory, LLM evaluation, and agent skill design and evals.
+> Yu Han Tey is an AI agent engineer based in Singapore. Yu Han works on agent memory, LLM evaluation and observability, and agent skill design and evals.
 
 ## Facts
 - Name: Yu Han Tey
 - Location: Singapore
 - Work: AI agent engineer
-- Topics: agent memory, LLM evaluation, LLM-as-a-judge, agent skill design, skill evaluation, Claude Skills, Claude Code
+- Topics: agent memory, LLM evaluation, LLM observability, trace replay, LLM-as-a-judge, agent skill design, skill evaluation, Claude Skills, Claude Code
 
 ## Writing
 - [How I build with AI: a 9-step loop, from first question to weekly review](https://yuhantey.github.io/posts/how-i-work-with-ai.html): how an AI engineer researches, decides, tests and ships with AI, and why repeat bugs were mostly not prompt problems.
