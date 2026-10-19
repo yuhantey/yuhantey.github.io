@@ -4227,7 +4227,8 @@ function animMap() {
     setTimeout(() => { if (mode === "map") enterChapter(CHAPTERS.find(c => c.id === mapAt)); }, pause); }
 }
 // town positions on the tall map (160 x 150)
-const MAPXY = { bias: [30, 28], evid: [106, 22], meta: [142, 44], mirror: [62, 50], prob: [98, 66], causal: [32, 90], dec: [130, 96], rocket: [80, 124], trap: [126, 126] };
+// laid out along one winding road in play order: across the top, down the right, back through the middle, then along the bottom
+const MAPXY = { bias: [28, 30], meta: [68, 22], causal: [108, 26], evid: [140, 52], dec: [130, 96], prob: [96, 70], mirror: [52, 84], rocket: [80, 124], trap: [126, 126] };
 const MAP_H = 150;
 function drawMap() {
   const g = document.getElementById("cv").getContext("2d"), P = px(g);
@@ -4240,13 +4241,13 @@ function drawMap() {
   P(10, 12, 140, 128, "#7fc477"); P(6, 20, 148, 112, "#7fc477"); P(16, 8, 124, 136, "#7fc477");
   // mountains around Bias Valley, forest, river from the lake, desert at the rocket base, blocks in Decision City
   hill(12, 30, 18, "#8a7fa8"); hill(24, 24, 14, "#9a90b8"); hill(40, 34, 16, "#8a7fa8"); P(22, 12, 4, 2, "#ffffff");
-  [[54, 76], [60, 82], [48, 84], [66, 92], [44, 100], [112, 40], [118, 46], [124, 38], [20, 112], [28, 118], [136, 120], [142, 72]].forEach(([x, y]) => tree(x, y));
-  for (let y = 56; y < 120; y++) P(62 + Math.round(Math.sin(y / 7) * 5), y, 3, 1, "#4f93d8");
+  [[20, 56], [14, 72], [36, 60], [40, 104], [24, 116], [118, 44], [88, 40], [150, 72], [150, 102], [112, 58]].forEach(([x, y]) => tree(x, y));
+  for (let y = MAPXY.mirror[1] + 8; y < 140; y++) P(MAPXY.mirror[0] - 4 + Math.round(Math.sin(y / 7) * 4), y, 3, 1, "#4f93d8");   // river flows from the lake to the sea
   P(60, 112, 44, 26, "#e0c27e"); P(56, 118, 52, 18, "#e0c27e");
   for (let k = 0; k < 6; k++) P(116 + (k % 3) * 9, 104 + Math.floor(k / 3) * 8, 7, 6, "#9aa0b8");
   // roads
   const road = (a, b) => { const A = MAPXY[a], B = MAPXY[b], n = 50; for (let k = 0; k <= n; k++) { if (k % 3 === 2) continue; P(Math.round(A[0] + (B[0] - A[0]) * k / n), Math.round(A[1] + (B[1] - A[1]) * k / n), 2, 2, "#f4e6c8"); } };
-  [["causal", "mirror"], ["bias", "mirror"], ["mirror", "prob"], ["prob", "evid"], ["evid", "meta"], ["prob", "dec"], ["causal", "rocket"], ["dec", "rocket"], ["meta", "dec"], ["rocket", "trap"], ["dec", "trap"]].forEach(([a, b]) => road(a, b));
+  ORDER.slice(1).forEach((id, i) => road(ORDER[i], id));   // one road, in the order you play
   // towns: a different little landmark for each
   const house = (x, y, roof) => { P(x - 6, y - 2, 12, 9, "#f4e6c8"); P(x - 7, y - 5, 14, 4, roof); P(x - 1, y + 2, 3, 5, "#6b4a2a"); };
   CHAPTERS.forEach(c => {
