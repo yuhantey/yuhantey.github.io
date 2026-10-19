@@ -61,6 +61,12 @@ button:focus-visible { outline: 2px solid var(--you); outline-offset: 2px; }
 .talk { position: relative; padding-right: 44px; }
 .talk .prev { position: absolute; right: 6px; bottom: 6px; width: 32px; height: 28px; padding: 0; text-align: center; font-size: 12px; box-shadow: 2px 2px 0 var(--shadow); background: #221c3d; }
 .talk .prev:disabled { opacity: .25; }
+.talk .log { position: absolute; right: 6px; top: 6px; width: 32px; height: 28px; padding: 0; text-align: center; font-size: 16px; line-height: 1; box-shadow: 2px 2px 0 var(--shadow); background: #221c3d; }
+.loglist { display: grid; gap: 8px; }
+.logline { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 14px; }
+.logline canvas { width: 30px; height: 30px; image-rendering: pixelated; border: 2px solid var(--line); background: #2e2650; }
+.logline b { display: block; font-family: var(--f-display); color: var(--you); font-weight: 500; font-size: 13px; }
+.logline.ask > div { border-left: 3px solid var(--you); padding-left: 8px; }
 .talk .more { float: right; color: var(--you); animation: blink 1s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
@@ -99,6 +105,45 @@ input[type=range] { width: 100%; accent-color: var(--you); height: 28px; }
 .tools div { border: 2px solid var(--line); padding: 8px 10px; font-size: 13px; }
 .tools .on { border-color: #5a4a2e; background: #2b2440; } .tools .on b { color: var(--you); }
 .tools .off { color: #5d5478; }
+.starrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.postcard { position: relative; width: 84px; height: 84px; flex: none; display: grid; place-items: center; }
+.postcard::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle, #ffcf7066 0%, #ffcf7022 45%, transparent 70%); animation: glow 2.4s 1s ease-in-out infinite alternate, fadeIn .4s .5s both; }
+.postcard img { position: relative; width: 72px; height: 72px; image-rendering: pixelated; filter: drop-shadow(0 3px 0 #0007); animation: cardIn .7s .5s cubic-bezier(.34,1.8,.5,1) both, wiggle 2s 1.3s ease-in-out infinite; transform-origin: 50% 90%; }
+.postcard .newtag { position: absolute; top: -4px; left: -6px; font: 11px/1 var(--f-display); color: #1b1730; background: #ff7a6b; padding: 4px 6px 3px; border: 2px solid #1b1730; box-shadow: 2px 2px 0 #0008; transform: rotate(-12deg); animation: tagIn .4s 1s cubic-bezier(.34,1.8,.5,1) both, tagPulse 1s 1.4s ease-in-out infinite; }
+@keyframes wiggle { 0%, 55%, 100% { transform: rotate(0); } 62% { transform: rotate(-10deg); } 69% { transform: rotate(9deg); } 76% { transform: rotate(-7deg); } 83% { transform: rotate(5deg); } 90% { transform: rotate(-2deg); } }
+@keyframes tagIn { from { transform: scale(0) rotate(-40deg); } to { transform: rotate(-12deg); } }
+@keyframes tagPulse { 50% { transform: rotate(-12deg) scale(1.12); } }
+.postcard i { position: absolute; width: 6px; height: 6px; background: var(--you); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); opacity: 0; animation: spark 1.6s ease-out infinite; }
+.postcard i:nth-child(1) { left: 6px; top: 10px; animation-delay: 1s; }
+.postcard i:nth-child(2) { right: 4px; top: 4px; width: 9px; height: 9px; animation-delay: 1.4s; }
+.postcard i:nth-child(3) { right: 10px; bottom: 6px; animation-delay: 1.9s; }
+.postcard i:nth-child(4) { left: 12px; bottom: 2px; width: 8px; height: 8px; animation-delay: 2.3s; }
+@keyframes cardIn { from { transform: scale(0) rotate(-12deg); opacity: 0; } 60% { opacity: 1; } to { transform: none; opacity: 1; } }
+@keyframes glow { to { transform: scale(1.15); opacity: .7; } }
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes spark { 0% { opacity: 0; transform: scale(.2); } 30% { opacity: 1; transform: scale(1) rotate(45deg); } 100% { opacity: 0; transform: scale(.4) rotate(90deg); } }
+@media (prefers-reduced-motion: reduce) { .postcard img, .postcard::before, .postcard i { animation: none; opacity: 1; } .postcard i { display: none; } .postcard .newtag { animation: none; } }
+.bboard { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; }
+.bcell { aspect-ratio: 1; min-width: 0; padding: 1px; border: 2px solid var(--line); background: #1a1531; box-shadow: none; display: grid; place-content: center; text-align: center; font-size: 10px; line-height: 1.15; overflow: hidden; color: var(--muted); }
+.bcell .q { display: block; font-family: var(--f-display); font-size: 15px; line-height: 1; color: var(--line); }
+.bcell .where { display: block; font-size: 9px; }
+.bcell.on { background: #3a2f18; border-color: var(--you); color: var(--you); font-weight: 700; }
+.bcell.free { background: repeating-linear-gradient(45deg, #2e2650 0 4px, #261f44 4px 8px); border-color: var(--muted); font-family: var(--f-display); font-size: 12px; }
+.bcell.inline { background: var(--you); border-color: #fff3cf; color: var(--bg); }
+.bcell.near { border-color: var(--bad); border-style: dashed; }
+.bdetail { border: 2px solid var(--line); padding: 6px 10px; font-size: 13.5px; }
+.bdetail b { color: var(--you); }
+.bhint { font-size: 13.5px; border-left: 4px solid var(--bad); padding: 6px 10px; background: #2a1f3a; }
+.bhint b { color: var(--you); }
+.shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.slot { border: 2px solid var(--line); padding: 4px 2px 3px; text-align: center; font-size: 11px; color: var(--muted); display: grid; justify-items: center; }
+.slot img { width: 32px; height: 32px; image-rendering: pixelated; }
+.slot.got { border-color: var(--you); color: var(--ink); }
+.slot .lock { font-family: var(--f-display); font-size: 20px; height: 32px; line-height: 32px; color: var(--line); }
+.bingowin { border: 2px solid var(--you); background: #2b2440; padding: 10px 12px; display: grid; gap: 6px; font-size: 14px; }
+.bingowin .bw-t { font-family: var(--f-display); font-size: 30px; color: var(--you); text-shadow: 3px 3px 0 var(--bad); animation: cardIn .6s .3s cubic-bezier(.34,1.8,.5,1) both; }
+.bingowin .bw-g { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.bingowin .bw-g > b { color: var(--you); }
 .gotool { border: 2px solid var(--you); padding: 8px 10px; font-size: 14px; }
 .gotool b { color: var(--you); }
 @media (max-height: 640px) { .talk { min-height: 76px; } .act { min-height: 50px; } }
@@ -197,7 +242,7 @@ input[type=range] { width: 100%; accent-color: var(--you); height: 28px; }
 <div class="app">
   <div class="bar"><span class="t" id="barT"></span><span class="r" id="barR"></span></div>
   <div class="scene" id="scene"><canvas id="cv" width="160" height="90"></canvas><div id="tags"></div></div>
-  <div class="talk" id="talk"><canvas id="face" width="14" height="14"></canvas><div><div class="who" id="who"></div><div class="say" id="say"></div></div><button class="prev" id="prevLine" aria-label="上一句 / previous line" disabled>◀</button></div>
+  <div class="talk" id="talk"><canvas id="face" width="14" height="14"></canvas><div><div class="who" id="who"></div><div class="say" id="say"></div></div><button class="log" id="logBtn" aria-label="对话记录 / conversation so far">≡</button><button class="prev" id="prevLine" aria-label="上一句 / previous line" disabled>◀</button></div>
   <div class="panel" id="panel"></div>
 </div>
 <div class="sheet" id="sheet" hidden><div class="sheet-in" id="sheetIn"></div></div>
@@ -742,6 +787,22 @@ const UI = {
   askLine: ["❓ 我要判断的是：{q}", "❓ What I need to decide: {q}"],
   tabResult: ["结果", "Result"], tabMore: ["其他线索和解释", "Other clues & details"],
   lockedSay: ["「{t}」还没开放。先完成「{p}」的所有案子，这里才会开。", "{t} is still locked. Finish every case in {p} to open it."],
+  newTag: ["新！", "NEW"],
+  logTitle: ["对话记录", "Conversation so far"],
+  logEmpty: ["还没有人说话。", "Nobody has said anything yet."],
+  bingoTitle: ["思维工具 Bingo", "Thinking-tool Bingo"],
+  bFree: ["免费", "FREE"],
+  bNear: ["差 <b>{n}</b> 格就 BINGO：", "<b>{n}</b> to BINGO: "],
+  bGo: ["去<b>{w}</b>查「{x}」", "find \"{x}\" in <b>{w}</b>"],
+  bAll: ["14 条线全部连上了！", "All 14 lines done!"],
+  bWhere: ["还没拿到。在<b>{w}</b>查线索就有。", "Not yet. Check the clues in <b>{w}</b> to get it."],
+  anyCase: ["任何一题", "any case"],
+  gearTitle: ["装备", "Gear"],
+  gearN: ["第 {n} 个", "No. {n}"],
+  newGear: ["新装备：", "New gear: "],
+  bExtra: ["连成一条线，送你 <b>+{p}</b> 分。", "A full line. Have <b>+{p}</b> points."],
+  toolLost: ["这题你用到了「{x}」，可是答错了，这次不算。工具要答对才拿得到。", "You used \"{x}\" here but still got it wrong, so it doesn't count. Tools only come with a right answer."],
+  gearNext: ["再拿 {n} 个工具，就有下一件装备", "{n} more tool(s) to the next piece of gear"],
   unlockNew: ["🔓 解锁了新地方：<b>{t}</b>！", "🔓 New place unlocked: <b>{t}</b>!"],
   resetBtn: ["重新开始", "Start over"], resetTitle: ["要重新开始吗？", "Start over?"],
   resetBody: ["分数、星星、答过的题、思维工具都会清空，只剩十字路口开着，教学也会再出现一次。这个动作不能复原。", "Points, stars, answered cases and tools will all be cleared. Only Crossroads stays open, and the tutorial shows again. This can't be undone."],
@@ -3417,6 +3478,283 @@ AHA.master = { v0: ["28 个人有 master，招聘要求写着硕士——这次�
 // put it second in Mirror Lake, right after the crush case
 DAILY_IDS.mirror = DAILY_IDS.mirror.filter(id => id !== "master"); DAILY_IDS.mirror.splice(1, 0, "master");
 
+// ================= five classic cases, brought back and rebuilt to the compare-the-clues rule =================
+// plane (Wald), test (base rate), flood (framing, the "Asian disease" study), bridge (planning fallacy), ice (ice cream and drowning).
+// Option 0 is always what the claimant wants.
+
+// the ice cream used its own drawn scene; it now uses ordinary places like every other case
+// the plane keeps its own drawn scene: you tap the part of the plane where the armour goes (wings 0, tail 1, body 2, engines 3, cockpit 4)
+Object.assign(CASE_BY_ID.ice, { theme: "sea", spots: [{ x: 34, label: "气象站", kind: "tower" }, { x: 80, label: "救生员", kind: "people" }, { x: 126, label: "冰淇淋摊", kind: "stall" }] });
+EN.cases.ice.tags = ["Weather station", "Lifeguard", "Ice cream stand"];
+// the plane's tool was pruned when the case left the game
+if (!TOOLS.some(x => x.id === "unseen")) TOOLS.push({ id: "unseen", name: "看看没回来的", d: "只看活下来的，会看错。去找那些消失了的。" });
+
+redo("plane", {
+  claim: [["我们数了这三个月所有飞回来的飞机上的弹孔。", "钢板很重，只能加在一个地方。你来定：加在哪里？"], ["We counted the bullet holes on every plane that came back over three months.", "Armour is heavy, so it can only go in one place. You decide: where?"]],
+  q: ["钢板应该加在哪里？", "Where should the armour go?"],
+  acts: [
+    { id: "count", go: 34, reveal: ["back"], zh: ["数一数回来的飞机上的弹孔", "回来的飞机上，每 100 个弹孔里：翅膀 47 个，机身 30 个，机尾 14 个，驾驶舱 7 个，发动机 2 个。"], en: ["Count the holes on planes that came back", "On the planes that came back, out of every 100 holes: wings 47, body 30, tail 14, cockpit 7, engines 2."] },
+    { id: "missing", go: 126, tool: "unseen", zh: ["问：一共飞出去多少架？", "飞出去 100 架，回来 60 架。另外 40 架没有回来。"], en: ["Ask: how many flew out?", "100 flew out and 60 came back. The other 40 never returned."] },
+    { id: "gunner", go: 80, zh: ["看缴获的敌军炮手手册", "手册写着：对准整架飞机打，子弹落在哪里，跟那个部位的大小成正比。按大小算，100 发里大约：翅膀 40，机身 25，机尾 12，发动机 17，驾驶舱 6。"], en: ["Read a captured enemy gunner's manual", "It says: aim at the whole plane; where bullets land is in proportion to each part's size. By size, out of 100 shots: wings 40, body 25, tail 12, engines 17, cockpit 6."] },
+    { id: "spread", go: 80, zh: ["问工程师", "工程师说：「机身最大，弹孔加起来也不少。钢板放在机身中间，前后都能挡一点。」"], en: ["Ask the engineer", "\"The body is the biggest part and has plenty of holes too. Armour in the middle of the body covers a bit of everything.\""] },
+  ],
+  herring: [["问飞行员哪种飞机最好开", "飞行员说：「新型号转弯更灵活。」"], ["Ask a pilot which plane flies best", "\"The new model turns more easily.\""]],
+  opts: [["翅膀", "发动机", "机身"], ["Wings", "Engines", "Body"]], t: [1],   // only for the completeness check; you tap one part of the plane
+  ex: ["按大小，100 发子弹里本来该有 17 发打在发动机，可是回来的飞机上，发动机只有 2 个弹孔。少掉的那些，在 40 架没回来的飞机上：发动机一中弹，飞机就回不来。驾驶舱本来该有 6 个，回来的飞机上有 7 个，说明驾驶舱挨打还能飞回来。翅膀弹孔最多，只是因为翅膀最大，而且挨打也撑得住。所以钢板该加在发动机。",
+       "By size, 17 of every 100 shots should hit the engines, yet the returning planes show only 2 engine holes. The missing ones are on the 40 planes that never came back: one engine hit and a plane doesn't make it home. The cockpit should get 6 and the returning planes show 7, so cockpit hits are survivable. The wings have the most holes only because they're the biggest part and can take it. So the armour goes on the engines."],
+});
+
+Object.assign(CASE_BY_ID.plane, { pick: true });
+// second version, where the colonel is right: almost all planes come back, and the engines already wear thick armour
+TWIST.plane.alt = { truth: [0],
+  react: [["好，加在翅膀。（后来翅膀被打穿的少了，回来的飞机也修得更快了。）", "钢板加上去了。可是敌人还是专打翅膀，回来的飞机照样满身是洞。"], ["Right, the wings. (Fewer wings got shot through after that, and returning planes were repaired faster.)", "The armour went on. But the enemy kept aiming at the wings, and the planes still came back full of holes."]],
+  notes: { missing: ["飞出去 100 架，回来 99 架。", "100 flew out and 99 came back."],
+           gunner: ["手册写着：敌机的发动机外面包了厚钢板，子弹打不进去。别瞄发动机，专打翅膀。", "It says: the enemy's engines are wrapped in thick armour that bullets can't get through. Don't aim at the engines; go for the wings."] },
+  zh: { ex: "这次 100 架里回来了 99 架，回来的飞机几乎就是全部，不用担心「没回来的」。发动机上没弹孔，是因为外面早就包了厚钢板，敌人根本不瞄那里，专打翅膀。所以这次钢板该加在翅膀。", plain: "先问：没回来的有多少？几乎全都回来了，看回来的就够了。很多都没回来，就要想想没回来的那些长什么样。" },
+  en: { ex: "This time 99 of 100 came back, so the returning planes are nearly all of them; there's no hidden group of lost planes. The engines have no holes because they already wear thick armour, and the enemy aims at the wings instead. So this time the armour goes on the wings.", plain: "First ask how many didn't come back. If almost all returned, the returners tell the whole story. If many were lost, think about what the lost ones looked like." } };
+HARD.plane.t = [1, 0];   // only for the completeness check; tap-a-part cases use verdict.truth / alt.truth
+CASE_BY_ID.plane.verdict = { ...CASE_BY_ID.plane.verdict, truth: [3], noClaim: true };   // the colonel takes no side (players read a confident claimant as a trap); reactions follow your pick
+CASE_BY_ID.plane.actions.find(a => a.id === "count").reveal = ["back"];
+
+redo("ice", {
+  claim: [["我们镇的数据很清楚：冰淇淋卖得越多的月份，在湖里淹水的人也越多。", "所以冰淇淋会让人淹水。我决定，从明天起全镇禁卖冰淇淋！"], ["Our town's data is clear: the more ice cream sells in a month, the more people drown in the lake.", "So ice cream makes people drown. From tomorrow, I'm banning ice cream!"]],
+  q: ["禁卖冰淇淋，能让淹水的人变少吗？", "Will banning ice cream mean fewer drownings?"],
+  acts: [
+    { id: "sales", go: 126, zh: ["翻冰淇淋摊的账本", "卖得最多的 3 个月，正好是淹水最多的 3 个月。"], en: ["Read the ice cream stand's books", "The 3 best-selling months are exactly the 3 months with the most drownings."] },
+    { id: "temp", go: 34, tool: "third", zh: ["查气象站的记录", "那 3 个月，也是一年里最热的 3 个月。"], en: ["Check the weather station's records", "Those 3 months were also the 3 hottest of the year."] },
+    { id: "swim", go: 80, zh: ["问救生员", "救生员说：「天一热，下湖游泳的人是平时的 5 倍。」"], en: ["Ask the lifeguard", "\"When it's hot, five times as many people swim in the lake.\""] },
+    { id: "luck", go: 34, zh: ["问镇上的统计员", "统计员说：「才一年的数据，说不定只是巧合。」"], en: ["Ask the town statistician", "\"It's only one year of data. Could just be chance.\""] },
+  ],
+  herring: [["问摊主对禁卖有什么看法", "摊主说：「禁卖？那我只好改卖汽水了。」"], ["Ask the vendor about the ban", "\"A ban? Then I'll just sell soda instead.\""]],
+  opts: [["能，应该禁卖", "不能，热天多派救生员才有用", "不能，两件事只是巧合"], ["Yes, ban it", "No; send more lifeguards on hot days", "No; it's just a coincidence"]], t: [1],
+  ex: ["冰淇淋卖得最多的月份，也是一年最热的月份。天热的时候，下湖游泳的人是平时的 5 倍。冰淇淋和淹水一起变多，背后是同一个原因：天热。禁卖冰淇淋救不了人，热天多派救生员才有用。说「只是巧合」也不对：两样都跟着天气走，每年夏天都会这样。",
+       "The best months for ice cream are also the hottest months, and on hot days five times as many people swim. Ice cream and drowning rise together because of one shared cause: heat. Banning ice cream saves no one; more lifeguards on hot days does. \"Just chance\" is wrong too: both follow the weather, every summer."],
+});
+
+redo("test", {
+  claim: [["你的检查结果出来了：紫斑病，阳性。", "这个测试 90% 准，所以你有 90% 的可能得了病。要不要马上开始吃药？药很贵哦。"], ["Your result is in: purple-spot disease, positive.", "This test is 90% accurate, so there's a 90% chance you have it. Shall we start the medicine now? It's expensive."]],
+  q: ["测出阳性，你真的得病的机会有多大？", "You tested positive. How likely is it that you really have it?"],
+  acts: [
+    { id: "acc", go: 62, zh: ["问检查室：有病的人测得出来吗", "有病的人，100 个里有 90 个会测出阳性。"], en: ["Ask the clinic: does it catch the sick?", "Of 100 people who have it, 90 test positive."] },
+    { id: "falsepos", go: 30, zh: ["翻病历本：没病的人呢", "没病的人，100 个里也有 9 个会被测成阳性。"], en: ["Check the records: what about the healthy?", "Of 100 people who don't have it, 9 also test positive."] },
+    { id: "rate", go: 100, tool: "base", zh: ["问村长：村里多少人有这个病", "村里 1000 个人，大约 10 个人有紫斑病。"], en: ["Ask the village head: how many have it?", "About 10 in 1,000 villagers have purple-spot disease."], alt: ["村里正在流行，1000 个人里大约 500 个人有紫斑病。", "There's an outbreak: about 500 in 1,000 villagers have it."] },
+    { id: "retest", go: 134, zh: ["问其他测出阳性的人", "好几个人说：「我也是阳性，后来复查，什么事都没有。这个测试根本不准。」"], en: ["Ask other people who tested positive", "Several say: \"I tested positive too, then the retest was clear. That test is useless.\""], alt: ["几个人说：「我也是阳性，后来复查，真的有。」", "A few say: \"I tested positive too, and the retest confirmed it.\""] },
+  ],
+  herring: [["问药房：这个药多少钱", "药房说：「一个疗程 3000 块。」"], ["Ask the pharmacy what the medicine costs", "\"3,000 a course.\""]],
+  opts: [["大约 90%，马上吃药", "不到一成，先复查", "测试不准，结果不用理"], ["About 90%; start the medicine", "Under 1 in 10; retest first", "The test is useless; ignore it"]], t: [1, 0],
+  ex: ["1000 个人里只有 10 个有病，他们测出阳性的大约 9 个。990 个没病的人里，也有大约 89 个被测成阳性。加起来 98 个阳性，真的有病的只有 9 个，不到一成。先复查，别急着吃贵的药。可是测试也不是没用：测出阳性以后，你得病的机会从 1% 升到了大约 9%。",
+       "Only 10 in 1,000 have it, and about 9 of them test positive. Of the 990 healthy people, about 89 also test positive. That's 98 positives, and only 9 are really sick: under 1 in 10. Retest before buying expensive medicine. But the test isn't useless: a positive raises your chance from 1% to about 9%."],
+  alt: [{ ex: "这次村里正在流行，1000 个人里 500 个有病，测出阳性的大约 450 个；500 个没病的人里，大约 45 个被测成阳性。495 个阳性里，450 个真的有病，大约九成。这时候医生说得对，该开始治了。", plain: "同一个测试，病很少见的时候，阳性大多是误会；病很常见的时候，阳性大多是真的。先问：这个病本来有多常见？这叫「基率」。" },
+        { ex: "This time there's an outbreak: 500 in 1,000 are sick and about 450 of them test positive; about 45 of the 500 healthy also do. Of 495 positives, 450 are real, about 9 in 10. The doctor is right this time: start treatment.", plain: "With the same test, a positive for a rare disease is usually a false alarm; for a common one it's usually real. First ask how common the disease is: the \"base rate\"." }],
+});
+
+redo("flood", {
+  claim: [["洪水要来了，600 个村民有危险。我有两个方案。", "甲：一定能救活 200 人。乙：三分之一的机会全部救活，三分之二的机会一个都救不了。我选甲，稳！"], ["A flood is coming and 600 villagers are in danger. I have two plans.", "A: 200 people will surely be saved. B: a 1 in 3 chance everyone is saved, a 2 in 3 chance no one is. I pick A. It's safe!"]],
+  q: ["方案甲和方案乙，哪个更好？", "Which is better, plan A or plan B?"],
+  acts: [
+    { id: "other", go: 36, zh: ["听另一个官员怎么说", "另一个官员说：「选甲，400 个人一定会死！选乙，还有三分之一的机会一个都不死。当然选乙！」"], en: ["Hear the other officer", "\"With A, 400 people will surely die! With B there's a 1 in 3 chance nobody dies. Obviously B!\""] },
+    { id: "abacus", go: 84, tool: "ev", zh: ["用算盘算乙", "乙平均能救：600 × 三分之一 = 200 人。"], en: ["Work out plan B on the abacus", "On average B saves 600 × 1/3 = 200 people."] },
+    { id: "lists", go: 84, tool: "frame", zh: ["对一对两份名单", "「甲能救活的 200 人」那份名单，和「甲会死的 400 人」那份名单，加起来正好是全村 600 人。"], en: ["Compare the two lists", "The list of \"200 saved under A\" and the list of \"400 who die under A\" add up to exactly the village's 600."] },
+    { id: "folk", go: 130, zh: ["问村民", "村民说：「一定救活 200，听起来安心多了。」"], en: ["Ask the villagers", "\"200 surely saved sounds much more reassuring.\""] },
+  ],
+  herring: [["问：洪水几点到", "「天亮前就到。」"], ["Ask when the flood arrives", "\"Before dawn.\""]],
+  opts: [["甲比较好，稳", "平均一样，要看能不能接受全没救的风险", "乙比较好，有机会全救"], ["A, it's safe", "Same on average; it depends on whether we can accept losing everyone", "B, everyone might be saved"]], t: [1],
+  ex: ["甲说「一定救活 200」，换个说法就是「一定死 400」：两份名单加起来就是全村。乙平均也是救活 200。两个方案平均结果一样，差别只在冒不冒险。听「救活」的人多半选稳的，听「会死」的人多半选赌一把：是说法在帮你做决定。该问的是：大家能不能接受「三分之二的机会一个都救不了」？不是哪种说法听起来舒服。",
+       "\"200 surely saved\" is the same as \"400 surely die\": the two lists make up the whole village. B also saves 200 on average. Both plans are equal on average; they differ only in risk. People who hear \"saved\" tend to play safe, people who hear \"die\" tend to gamble: the wording decides for them. The real question is whether everyone can accept a 2 in 3 chance of saving no one, not which wording feels better."],
+});
+
+redo("bridge", {
+  claim: [["这座桥？简单！我两个月就能修好。", "我已经想好了每一步，绝对不会出问题。"], ["This bridge? Easy! I'll have it done in two months.", "I've planned every step. Nothing will go wrong."]],
+  q: ["这座桥，大概要多久才能修好？", "Roughly how long will this bridge take?"],
+  acts: [
+    { id: "plan", go: 126, zh: ["去工地看他的计划", "他把每一步都排好了：打桩、架梁、铺板、上栏杆，加起来正好 8 个礼拜。"], en: ["See his plan at the site", "Every step is scheduled: piles, beams, planks, railings. Exactly 8 weeks in total."] },
+    { id: "start", go: 34, tool: "outside", zh: ["翻他的账本第一页", "他以前修过 4 座桥，都是 1 月开工，每一座都写着「预计两个月」。"], en: ["Read the first page of his records", "He's built 4 bridges before, all started in January, each marked \"expected: two months\"."] },
+    { id: "finish", go: 80, zh: ["问别的木匠", "别的木匠说：「他那 4 座桥我都帮过忙，完工都在 5、6 月。」"], en: ["Ask other carpenters", "\"I helped on all 4 of his bridges. They were finished in May or June.\""], alt: ["别的木匠说：「他那 4 座桥我都帮过忙，完工都在 3 月。」", "\"I helped on all 4 of his bridges. They were all finished in March.\""] },
+    { id: "rain", go: 126, zh: ["问工地旁的老人", "老人说：「这里雨季一来，什么都说不准。修个三五年也不奇怪。」"], en: ["Ask the old man by the site", "\"When the rains come, anything can happen. Three to five years wouldn't surprise me.\""] },
+  ],
+  herring: [["问：桥修好以后叫什么", "木匠说：「就叫彩虹桥吧。」"], ["Ask what the bridge will be called", "\"Rainbow Bridge, I think.\""]],
+  opts: [["两个月左右", "四到六个月", "说不准，可能要好几年"], ["About two months", "Four to six months", "Who knows, maybe years"]], t: [1, 0],
+  ex: ["他以前 4 座桥都是 1 月开工、说两个月，结果都到 5、6 月才完工，每次都用了说好的两三倍时间。这次计划再详细，也是同一个人在估。照他以前真实用的时间，四到六个月比较实际。说要好几年也太夸张：他每座桥最后都修好了。",
+       "His 4 earlier bridges all started in January with \"two months\" written down, and all finished in May or June: two to three times longer each time. However detailed this plan is, it's the same person estimating. Going by how long he really took, four to six months is realistic. Years is too much: he finished every one."],
+  alt: [{ ex: "这次他以前的 4 座桥都是 1 月开工、3 月完工：说两个月，就真的是两个月左右。他估得准，就信他。", plain: "估时间时，别只看这次的计划有多详细，先看以前真实用了多久。这叫「规划谬误」：人总是觉得这一次会比较顺。" },
+        { ex: "This time his 4 earlier bridges all started in January and finished in March: \"two months\" really meant about two months. He estimates well, so trust him.", plain: "When estimating, don't judge by how detailed this plan is; check how long it really took before. Thinking this time will go smoothly is the \"planning fallacy\"." }],
+});
+
+REACT_MORE.plane = ["加在发动机上？那里几乎没有弹孔啊。说实话，我本来觉得你疯了。（后来回来的飞机，真的变多了。）", "钢板加上去了。可是回来的飞机……还是那么少。"];
+EN.reactions.plane = ["The engines? They've barely got a scratch. Honestly, I thought you'd lost your mind. (After that, more planes really did come home.)", "The armour went on. But just as few planes came home."];
+AHA.plane = { normal: ["按大小该有 17 发打在发动机，回来的飞机上只有 2 个。", "By size, 17 shots should hit the engines; returning planes show only 2."], alt: ["100 架回来 99 架，发动机本来就打不穿：这次该加在翅膀。", "99 of 100 came back and the engines can't be pierced: this time it's the wings."] };
+AHA.ice = { normal: ["最热的 3 个月，冰淇淋卖最多，下湖游泳的人也是平时的 5 倍。", "The 3 hottest months: most ice cream sold, and five times as many swimmers."] };
+AHA.test = { normal: ["98 个阳性里，只有 9 个真的有病。", "Of 98 positives, only 9 are really sick."], alt: ["村里一半人都有病：495 个阳性里，450 个是真的。", "Half the village is sick: 450 of 495 positives are real."] };
+AHA.flood = { normal: ["「一定救活 200」就是「一定死 400」：同一个方案，两种说法。", "\"200 surely saved\" is \"400 surely die\": one plan, two wordings."] };
+AHA.bridge = { normal: ["1 月开工，5、6 月完工：他每次说两个月，都修了四五个月。", "Started in January, done in May or June: every \"two months\" took four or five."], alt: ["1 月开工，3 月完工：他说两个月，真的就是两个月。", "Started in January, done in March: his \"two months\" really was two months."] };
+
+REACT_MORE.bridge = ["……好吧，我照以前真实用的时间，跟村长说五个月。", "好！两个月！……三个月后，桥才打完桩。"];
+EN.reactions.bridge = ["...Fine. Going by how long it really took before, I'll tell the mayor five months.", "Great, two months! ...Three months later, only the piles are in."];
+REACT_MORE.flood = ["……原来两个方案平均一样，我只是被说法带着走了。", "对！救活 200 人，多好听！"];
+
+SOURCES.plane.head = ["经典例子（情景是编的）", "Classic example (scenario invented)"];
+SOURCES.ice.head = ["教学例子（故事是编的）", "Teaching example (story invented)"];
+SOURCES.test.head = SOURCES.flood.head = SOURCES.bridge.head = ["真实研究（情景是编的）", "Real study (scenario invented)"];
+
+DAILY_IDS.evid.push("plane");
+DAILY_IDS.causal.push("ice");
+DAILY_IDS.prob.push("test");
+DAILY_IDS.dec.push("flood");
+// bridge was tried and dropped (10-19): she didn't like the carpenter example
+// the pharmacy card says 3,000 a course, so three courses cost 9,000
+REACT_MORE.test = ["……我再给你做一次检查吧。先别急着买药。", "那就买药吧！三个疗程，一共九千。"];
+
+// ================= neutral card titles =================
+// Players could guess the answer from the titles alone ("Ask neighbours: do flats here leak?").
+// Rule: a title only names who or where you check. What you learn is inside the card.
+const LABELS = {
+  ice: { herring: ["问冰淇淋摊主", "Ask the ice cream vendor"] },
+  tutor: { who: ["问补习班的招生老师", "Ask the cram school's admissions staff"], same: ["翻报班孩子的成绩单", "Read the enrolled kids' report cards"], others: ["翻班上其他同学的成绩单", "Read the other classmates' report cards"], teacher: ["问任课老师", "Ask the class teacher"] },
+  schools: { bottom: ["看完整的排名表", "Read the full rankings"], years: ["翻往年的排名表", "Read past years' rankings"] },
+  nap: { who: ["看报名表", "Read the sign-up sheet"], lotin: ["问隔壁分公司的人事", "Ask HR at the branch next door"], lotout: ["看隔壁分公司的压力调查", "Read the branch next door's stress survey"] },
+  coach: { best: ["翻上个月的成绩表", "Read last month's results"], ours: ["翻这个月的成绩表", "Read this month's results"], other: ["问隔壁村的教练", "Ask the coach in the next village"] },
+  aicheck: { rate: ["问老师", "Ask the teacher"], false: ["看说明书的小字", "Read the fine print"], drafts: ["翻你的电脑", "Look through your computer"] },
+  tea: { count: ["打开点评 App 的店铺页", "Open both shops on the review app"], when: ["点开新店的评价", "Open the new shop's reviews"] },
+  surgery: { same: ["再听一遍两位医生的话", "Listen to both doctors again"], ask: ["问两位医生", "Ask both doctors"] },
+  flood: { abacus: ["拿算盘", "Use the abacus"], lists: ["看救援名单", "Read the rescue lists"], herring: ["问气象站", "Ask the weather station"] },
+  blindbox: { odds: ["问店员", "Ask the shop assistant"], resale: ["逛二手平台", "Browse a resale site"], set: ["问收藏群", "Ask the collectors' group"] },
+  house: { leak: ["问邻居", "Ask the neighbours"], repair: ["问修水管的师傅", "Ask a plumber"], inspect: ["问验房师", "Ask a home inspector"], herring: ["问物业", "Ask the building manager"] },
+  fly: { news: ["翻报纸", "Read the newspapers"], car: ["查交通部的统计", "Check the transport ministry's figures"], plane: ["查航空局的统计", "Check the aviation authority's figures"], herring: ["看电视新闻", "Watch the TV news"] },
+  listing: { sales: ["查成交记录", "Check the sales records"], blind: ["请另一位经纪估价", "Ask another agent for a valuation"], low: ["请第三位经纪估价", "Ask a third agent for a valuation"], record: ["翻这位经纪的旧估价单", "Read this agent's old valuations"] },
+  essay: { speed: ["翻他上次的报告", "Look at his last report"] },
+  bacon: { real: ["找原始研究", "Find the original study"], base: ["问医生", "Ask a doctor"], most: ["翻研究的附表", "Read the study's tables"] },
+  plane: { count: ["去机库看回来的飞机", "Look at the returned planes in the hangar"], missing: ["看出勤记录", "Read the mission log"], herring: ["问飞行员", "Ask a pilot"] },
+  fund: { axis: ["看宣传图的小字", "Read the small print on the chart"], gain: ["查基金公司的公告", "Read the fund company's reports"], peers: ["看理财 App 的排行榜", "Check a finance app's rankings"] },
+  dogfood: { vet: ["问兽医", "Ask the vet"] },
+  breakup: { also: ["翻同一个月的群聊", "Scroll the group chat from that month"] },
+  rain: { days: ["翻气象局去年的记录", "Read the weather office's records from last year"], rained: ["翻雨量站去年的记录", "Read the rain gauge's records from last year"] },
+  testfly: { how: ["去测试场看看", "Visit the test site"] },
+  landing: { fuel: ["问燃料组", "Ask the fuel team"] },
+  rumor: { control: ["找原始调查报告", "Find the original survey"], relatives: ["问转发的亲戚", "Ask the relatives who shared it"] },
+  colleague: { others: ["问问别的同事", "Ask other colleagues"] },
+  covid94: { real: ["找数据来源", "Find where the number comes from"], who: ["查死亡登记", "Check the death records"], uptake: ["查卫生局的接种数据", "Check the health office's vaccination data"] },
+  speedcam: { past: ["查：交通局的旧档案", "Records: the traffic office's old files"] },
+  survey: { missing: ["查：人事部的名单", "Check: HR's staff list"] },
+};
+for (const [id, m] of Object.entries(LABELS)) {
+  const c = CASE_BY_ID[id], e = EN.cases[id];
+  for (const [aid, [zh, en]] of Object.entries(m)) {
+    if (aid === "herring") { TWIST[id].herring.zh[0] = zh; TWIST[id].herring.en[0] = en; continue; }
+    const a = c.actions.find(x => x.id === aid);
+    a.l = zh; e.actions[aid][0] = en;
+  }
+}
+
+// ================= fewer "look at the group that didn't do it" cases =================
+// A tester solved 4 cases the same way: find the card about people who didn't get A, and compare.
+// Only the speed camera case keeps that move; these 4 now each need a different one.
+
+// new tools for the new moves; the control-group and random-groups tools leave with the old cards
+TOOLS.push({ id: "gapbefore", name: "先看本来就差多少", d: "两组差很多？先看看开始之前，他们是不是本来就差这么多。" }, { id: "measure", name: "问：这个数字怎么量的", d: "同一件事，什么时候量、谁来量，数字会差很多。" });
+EN.tools.gapbefore = ["Check the gap before", "A big gap? First check whether it was already there before."];
+EN.tools.measure = ["Ask how it was measured", "When and who measures can change the number a lot."];
+
+// ---------- tutor: was the gap already there before signing up? ----------
+redo("tutor", {
+  acts: [
+    { id: "who", go: 34, tool: "third", zh: ["问补习班的招生老师", "报班的，大多是本来就很重视学习的家庭，很多家长每天都陪孩子复习。"], en: ["Ask the cram school's admissions staff", "Mostly families who already care a lot about school; many parents review with their kids every day."] },
+    { id: "before", go: 80, tool: "gapbefore", zh: ["翻报班前那学期的成绩单", "报班前那学期，这些孩子就已经比全班平均高 13 分。"], en: ["Read the report cards from the term before", "The term before signing up, these kids were already 13 points above the class average."], alt: ["报班前那学期，这些孩子跟全班平均差不多。", "The term before signing up, these kids were about level with the class average."] },
+    { id: "now", go: 80, zh: ["翻这学期的成绩单", "这学期，报班的孩子比全班平均高 15 分。"], en: ["Read this term's report cards", "This term, the enrolled kids are 15 points above the class average."] },
+    { id: "teacher", go: 126, zh: ["问任课老师", "老师说：「上补习班的孩子，上课都比较积极。」"], en: ["Ask the class teacher", "\"Kids who go to cram school are keener in class.\""] },
+  ],
+  herring: [["问问隔壁的家长", "隔壁妈妈说：「我儿子上了这个班，期末多了 20 分！」"], ["Ask the parent next door", "\"My son took this class and went up 20 points at finals!\""]],
+  opts: [["能，高 15 分", "有一点用，但远远没有 15 分", "补习班完全没用"], ["Yes, +15 points", "A little, but nowhere near 15", "Cram school does nothing"]], t: [1, 0],
+  ex: ["报班的孩子现在比全班高 15 分，可是报班前，他们就已经高 13 分了。这些家庭本来就更重视学习。报班以后，差距只多了 2 分，这 2 分才可能是补习班的功劳。有一点用，但远远没有 15 分。说「完全没用」也不对。",
+       "Enrolled kids are now 15 points above the class, but before signing up they were already 13 above. These families already cared more. The gap grew by only 2 points after signing up, and only those 2 could be the class's doing. A little, nowhere near 15, and not zero either."],
+  alt: [{ ex: "这次报班前，这些孩子跟全班差不多；报班以后，高了 15 分。差距是报班以后才出现的，基本就是补习班的功劳。", plain: "两组差很多时，先看开始之前是不是本来就差这么多。之后多出来的，才可能是它的功劳。" },
+        { ex: "This time the kids were level with the class before signing up, and 15 points ahead after. The gap appeared after signing up, so it's essentially the class's doing.", plain: "When two groups differ a lot, check whether the gap was there before. Only what's added after can be the cause." }],
+});
+
+// ---------- nap: how was the 30% measured? ----------
+Object.assign(CASE_BY_ID.nap, { spots: [{ x: 34, label: "报名表", kind: "board" }, { x: 80, label: "上课的同事", kind: "people" }, { x: 126, label: "人事部", kind: "house" }] });
+EN.cases.nap.tags = ["Sign-up sheet", "Attendees", "HR"];
+redo("nap", {
+  acts: [
+    { id: "who", go: 34, zh: ["看报名表", "报名的，大多是本来就在调整作息的人。"], en: ["Read the sign-up sheet", "Mostly people who were already fixing their routines."] },
+    { id: "how", go: 126, tool: "measure", zh: ["问人事：压力分数怎么来的", "人事说：「上课前填一次问卷。三个月后那次，是上完最后一节课，大家当场在教室里填的。」"], en: ["Ask HR how the stress score was taken", "\"One survey before the course. The one three months later was filled in on the spot, in the room, right after the last class.\""], alt: ["人事说：「上课前填一次问卷，三个月后再填一次。两次都是周一早上在自己座位上填的。」", "\"One survey before the course and one three months later. Both on a Monday morning at people's own desks.\""] },
+    { id: "sick", go: 126, zh: ["翻请假记录", "上课的人，这三个月请病假的天数，跟上课前三个月一样多。"], en: ["Read the leave records", "Attendees took as many sick days in these three months as in the three months before."], alt: ["上课的人，这三个月请病假的天数，比上课前三个月少了一半。", "Attendees took half as many sick days in these three months as in the three months before."] },
+    { id: "feel", go: 80, zh: ["听听上课的人怎么说", "一个同事说：「上完课我整个人都轻松了，强烈推荐！」"], en: ["Hear what attendees say", "\"I feel so much lighter after class. Highly recommend!\""] },
+  ],
+  herring: [["看看冥想老师的证书", "老师有一张国际认证的冥想导师证书。"], ["Check the teacher's certificate", "The teacher has an international meditation instructor certificate."]],
+  opts: [["是冥想课的功劳", "大部分不是", "冥想课完全没用"], ["Yes, the class did it", "Mostly not", "The class does nothing"]], t: [1, 0],
+  ex: ["降了 30% 的那次问卷，是刚上完一节放松的课、在教室里当场填的，谁那时候都会觉得轻松。可是看平常的日子：病假一天都没少。这 30% 大部分是「刚下课」量出来的，不是三个月来真的变了。说「完全没用」也太过：下课那一刻的轻松也是真的，只是撑不了多久。",
+       "The survey showing 30% less stress was filled in right after a relaxing class, in the room; anyone would feel calm then. On ordinary days, sick leave didn't drop at all. Most of the 30% comes from measuring straight after class, not from three months of real change. \"Does nothing\" goes too far: the calm after class is real, it just doesn't last."],
+  alt: [{ ex: "这次两次问卷都是周一早上在座位上填的，量法一样；病假也少了一半。平常的日子也真的变好了，这 30% 基本就是冥想课的功劳。", plain: "看到一个数字，先问：什么时候量的、怎么量的？前后量法一样，比出来的变化才算数。" },
+        { ex: "This time both surveys were taken the same way, Monday morning at people's desks, and sick days halved. Ordinary days really improved, so the 30% is essentially the class's doing.", plain: "Before trusting a number, ask when and how it was measured. Only a change measured the same way both times counts." }],
+});
+CASE_BY_ID.nap.explain = { ...CASE_BY_ID.nap.explain, name: "先问：这个数字怎么量的", plain: "同一件事，什么时候量、谁来量、怎么量，数字会差很多。前后量法要一样，比出来的变化才算数。" };
+EN.cases.nap.explain = { ...EN.cases.nap.explain, name: "Ask how it was measured", plain: "When, who and how you measure can change a number a lot. Only compare numbers measured the same way." };
+
+// ---------- coach: what are these kids usually like? ----------
+Object.assign(CASE_BY_ID.coach, { spots: [{ x: 40, label: "表扬榜", kind: "board" }, { x: 80, label: "档案柜", kind: "house" }, { x: 112, label: "成绩册", kind: "board" }, { x: 142, label: "小孩们", kind: "people" }] });
+EN.cases.coach.tags = ["Praise board", "Filing cabinet", "Results book", "The kids"];
+redo("coach", {
+  acts: [
+    { id: "kid", go: 142, zh: ["问问被骂的小孩", "一个小孩说：「被骂完我很怕，回家就拼命学。」"], en: ["Ask a scolded kid", "\"After the scolding I was scared and studied like mad.\""] },
+    { id: "best", go: 40, zh: ["翻上个月的成绩表", "上个月最好的 5 个被表扬了。这个月，他们有 4 个退步了。"], en: ["Read last month's results", "Last month's top 5 were praised. This month, 4 of them slipped."] },
+    { id: "ours", go: 112, zh: ["翻这个月的成绩表", "被骂的 5 个，上个月平均 55 分，这个月平均 65 分。"], en: ["Read this month's results", "The scolded 5 averaged 55 last month and 65 this month."] },
+    { id: "history", go: 80, tool: "regress", zh: ["翻档案柜里这一年的成绩", "这 5 个小孩，这一年平常大多考 70 分左右。上个月的 55 分，是他们一年里最差的一次。"], en: ["Read this year's results in the filing cabinet", "These 5 usually score around 70. Last month's 55 was their worst all year."] },
+  ],
+  herring: [["问问老师骂得多凶", "老师说：「我骂得很凶，整个操场都听得到！」"], ["Ask how harsh the scolding was", "\"I yelled so loud the whole field heard!\""]],
+  opts: [["骂有用", "骂没什么用，最差的本来就会回升", "表扬会让人退步"], ["Scolding works", "Not really; the worst usually bounce back anyway", "Praise makes kids worse"]], t: [1],
+  ex: ["这 5 个小孩平常考 70 分左右，上个月掉到 55，是一年里最差的一次。这个月回到 65，还没回到平常的 70。他们只是从特别差的一次，往平常的样子回去，不是骂出来的进步。被表扬的最好 5 个这个月退步，也是同一个道理：特别好的那次，下次常常回落。",
+       "These 5 usually score around 70. Last month they fell to 55, their worst all year. This month they're back to 65, still below their usual 70. They just drifted back from an unusually bad month; the scolding didn't do it. The praised top 5 slipping is the same thing: an unusually good month is often followed by a lower one."],
+});
+
+// ---------- rumor: who said it first? ----------
+redo("rumor", {
+  acts: [
+    { id: "shares", go: 34, zh: ["看看这条消息被转了多少次", "已经被转了 10 万次，当医生的远房表姐也转了。"], en: ["See how widely it's been shared", "It's been shared 100,000 times, including by a distant cousin who's a doctor."] },
+    { id: "origin", go: 34, tool: "socialp", zh: ["一层一层往回找最早的那条", "最早发这条消息的，是一家卖这种茶的网店。"], en: ["Trace it back to the first post", "The first post came from an online shop that sells this tea."] },
+    { id: "study", go: 126, zh: ["找消息里说的「研究」", "消息里说「研究发现」，可是查不到这项研究。网店客服说：「是我们自己问了 50 个老客户。」"], en: ["Look for the \"study\" it mentions", "It says \"research shows\", but no such study can be found. The shop's support says: \"We asked 50 of our regular customers.\""] },
+    { id: "harm", go: 80, zh: ["问转发的亲戚", "一个亲戚说：「隔壁群又在传，这种茶喝多了伤肝。」"], en: ["Ask the relatives who shared it", "One says: \"Another group says this tea damages your liver if you drink a lot.\""] },
+  ],
+  herring: [["看看这种茶的包装", "包装很精美，写着「百年古方」。"], ["Look at the tea's packaging", "Beautiful packaging: \"A century-old recipe\"."]],
+  opts: [["可信", "不可信", "这种茶对身体有害"], ["Believable", "Not believable", "This tea is harmful"]], t: [1],
+  ex: ["转了 10 万次，听起来很像真的。可是往回找，最早发消息的是卖这种茶的网店；它说的「研究」，是问了自己 50 个老客户。会一直回来买的老客户，本来就是觉得有用的人。这说明不了茶有用。说它「伤肝」也一样，是另一条找不到来源的消息。",
+       "100,000 shares makes it sound true. But traced back, the first post came from a shop selling the tea, and its \"research\" was asking 50 regular customers. Regular customers are people who already think it works. That shows nothing. \"It damages your liver\" is the same: another claim with no source."],
+});
+CASE_BY_ID.rumor.explain = { ...CASE_BY_ID.rumor.explain, plain: "看到很多人都在说一件事，先往回找：最早是谁说的？他有没有好处？他说的证据，查得到吗？" };
+EN.cases.rumor.explain = { ...EN.cases.rumor.explain, plain: "When everyone's saying something, trace it back: who said it first, do they gain from it, and can their evidence be found?" };
+
+AHA.tutor = { normal: ["报班前就已经高 13 分，补习班只多了 2 分。", "They were already 13 points ahead before signing up; the class added 2."], alt: ["报班前跟全班一样，报班后高了 15 分。", "Level with the class before, 15 ahead after."] };
+AHA.nap = { normal: ["问卷是刚下课当场填的，病假一天都没少。", "The survey was filled in right after class, and sick days didn't drop at all."], alt: ["两次都是周一早上填的，病假也少了一半。", "Both surveys on a Monday morning, and sick days halved."] };
+AHA.coach = { normal: ["他们平常考 70，上个月 55 是一年最差，这个月只是回到 65。", "They usually score 70; last month's 55 was their worst, and 65 is just a bounce back."] };
+AHA.rumor = { normal: ["最早发消息的，就是卖这种茶的网店。", "The first post came from the shop selling the tea."] };
+
+// drop tools no remaining case gives out (the control-group and random-groups tools)
+{ const given = new Set(["early"]);
+  Object.values(DAILY_IDS).flat().forEach(id => (CASE_BY_ID[id].actions || []).forEach(a => a.tool && given.add(a.tool)));
+  for (let i = TOOLS.length - 1; i >= 0; i--) if (!given.has(TOOLS[i].id)) TOOLS.splice(i, 1); }
+
+// ================= numbers that say exactly what they count =================
+// aicheck: the old claim had two different "98%" (a score, and a vague "accuracy"). A tester only got it right
+// because they already knew it meant "of AI-written essays, it flags 98". Now there's one number with one meaning,
+// and the teacher's mistake is flipping it into "of flagged essays, 98% used AI".
+CASE_BY_ID.aicheck.claim = ["这个检测工具，用 AI 写的作文，100 篇里能抓出 98 篇。你的作文被它标出来了。", "所以你有 98% 的可能用了 AI。我只能先按用了 AI 来处理。"];
+EN.cases.aicheck.claim = ["This detector catches 98 of every 100 AI-written essays. It flagged yours.", "So there's a 98% chance you used AI. I'll have to treat it as AI-written for now."];
+CASE_BY_ID.aicheck.actions.find(a => a.id === "acc").note = "官网写着：「用 AI 写的作文，100 篇里能抓出 98 篇。已有 500 所学校在用。」";
+EN.cases.aicheck.actions.acc[1] = "\"Catches 98 of every 100 AI-written essays. Used by 500 schools.\"";
+CASE_BY_ID.aicheck.explain = { ...CASE_BY_ID.aicheck.explain, ex: "「用 AI 写的，100 篇抓出 98 篇」，不等于「被抓出来的，100 篇有 98 篇用了 AI」。要先想班上本来有多少人用 AI。100 篇里大约只有 1 篇真的用了，会被抓到；99 篇自己写的里，每 25 篇误标 1 篇，大约会误标 4 篇。被标出来的大约 5 篇里，只有 1 篇真的用了 AI，所以大约 20%。没有草稿记录，也不能说明什么。" };
+EN.cases.aicheck.explain = { ...EN.cases.aicheck.explain, ex: "\"Catches 98 of 100 AI-written essays\" is not the same as \"98 of 100 flagged essays used AI\". First ask how many in the class used AI. Of 100 essays, about 1 used AI and gets caught. Of the 99 human ones, 1 in 25 is wrongly flagged, so about 4. Of roughly 5 flagged, only 1 used AI. That's about 20%. Missing drafts don't prove anything either." };
+
+// test: same problem, "90% accurate" — say what the 90 counts
+CASE_BY_ID.test.claim = ["你的检查结果出来了：紫斑病，阳性。", "这个测试，有病的人 100 个里能测出 90 个。所以你有 90% 的可能得了病。要不要马上开始吃药？药很贵哦。"];
+EN.cases.test.claim = ["Your result is in: purple-spot disease, positive.", "This test picks up 90 of every 100 people who have it. So there's a 90% chance you have it. Shall we start the medicine now? It's expensive."];
+
+// ================= Mirror Lake: keep the 3 most complex cases =================
+// She asked to cut Mirror Lake down: crush and master (3 versions each) and phd (2 versions, weighs past cost,
+// future cost and the job's requirements together) stay; rumor, colleague, chores and fair go.
+DAILY_IDS.mirror = DAILY_IDS.mirror.filter(id => ["phd", "crush", "master"].includes(id));
+{ const given = new Set(["early"]);
+  Object.values(DAILY_IDS).flat().forEach(id => (CASE_BY_ID[id].actions || []).forEach(a => a.tool && given.add(a.tool)));
+  for (let i = TOOLS.length - 1; i >= 0; i--) if (!given.has(TOOLS[i].id)) TOOLS.splice(i, 1); }
+
 // ================= clearer questions: each one says who, what happened, and what you're judging =================
 const Q = {
   tutor: ["上这家补习班，真的能让成绩高 15 分吗？", "Does this cram school really raise scores by 15 points?"],
@@ -4206,8 +4544,175 @@ const REWRITE = [
 [
 "If independent, past results don't count; if the machine",
 "If each try is independent, past results don't count. If the machine"
-]
+],
+["淹水","溺水"]
 ];
+
+// ================= voice pass (both languages) =================
+// Whole-line swaps so the English is as dry and sarcastic as the Chinese, the Chinese is as sharp as the English,
+// and both say the same thing. Runs after the REWRITE pairs.
+const VOICE = new Map([
+[
+"In every place, someone is sure they're right. Sometimes it's you.<br>Check first, then judge. Or don't check. It's not my reputation on the line.",
+"In every place, someone is sure they're right. Sometimes it's you.<br>Check first, then judge. Or don't check. I'm not the one who'll look silly."
+],
+[
+"All correct, how impressive. But {o} time(s) you barely checked on cases that could go either way. Do give luck half the credit.",
+"All correct, how impressive. But {o} time(s) you barely checked, on cases that could have gone either way. So remember to split this perfect score with luck."
+],
+[
+"You check everything, very diligent. Shame about the last step. Next time look back at your notes and find the clue that fooled you.",
+"You check carefully and never skip a clue. Shame you keep tripping on the very last step. Next time, look back at your notes and find the clue that fooled you."
+],
+[
+"When the clues contradict each other, the honest answer is \"can't tell\". That's fine to say. Forcing a pick is worse.",
+"When the clues contradict each other, the honest answer is \"can't tell\". Nothing to be ashamed of. Forcing a pick is the embarrassing part."
+],
+[
+"There are {n} cases here. You get <b>{d} days</b> each, not enough to check everything, so don't try.<br>Pick the useful clues, then tap an answer. Tapping counts.",
+"There are {n} cases here. You get <b>{d} days</b> each. You can't check everything, so don't even think about it.<br>Pick the useful clues, then tap an answer. Once you tap, it counts."
+],
+[
+"Tap an answer to submit. Sure about it? Doesn't matter, nobody ever is.",
+"Tap an answer to submit. Thought it through? If not, that's fine. Nobody else did either."
+],
+[
+"{o} time(s) you decided after checking one thing. Bold.",
+"{o} time(s) you decided after checking just one thing. Brave of you."
+],
+[
+"Decided after checking {n} thing(s), and guessed right. Congrats. Luck may not show up next time.",
+"Decided after checking {n} thing(s), and guessed right. Congrats. Luck might not show up for work next time."
+],
+[
+"The engines? They've barely got a scratch. Honestly, I thought you'd lost your mind. (After that, more planes really did come home.)",
+"The engines? There are hardly any holes there. Honestly, I thought you were mad. (After that, more planes really did come home.)"
+],
+[
+"The armour went on. But just as few planes came home.",
+"The armour went on. And the planes coming home... still just as few."
+],
+[
+"Then let's buy the medicine! Three courses, 8,000 total.",
+"Great, medicine it is! Three courses, only 9,000 total."
+],
+[
+"...So I was just being led by the wording.",
+"...So both plans save the same number on average. I just got pulled along by the wording."
+],
+[
+"Right! Saving 200 sounds so much better!",
+"Right! \"200 people saved!\" Doesn't that sound lovely?"
+],
+[
+"Signed! Congratulations! ...Keep a bucket handy when it rains.",
+"Signed! Congratulations! ...Oh, and keep a bucket handy when it rains."
+],
+[
+"...Maybe I should say 'one more person' too.",
+"...Maybe I should've also said it's just 'one more person'."
+],
+[
+"Yes! Throw it out! Ratings are going up!",
+"Yes! Bin it now! Ratings are going up again!"
+],
+[
+"...You did the math. I can't even pitch it now.",
+"...You did the math so clearly, I'm too embarrassed to keep selling."
+],
+[
+"Great! One more? This one's definitely the secret!",
+"Coming right up! One more box? This time it's the secret one, for sure!"
+],
+[
+"...So it's the same surgery. Let's decide on other things then.",
+"...So it's the same surgery after all. Let's compare other things before we decide."
+],
+[
+"Dr. A it is! \"90 survive\" just sounds safer.",
+"Dr. A it is! \"90 survive.\" Just hearing it makes me feel better."
+],
+[
+"...Well, marketing made the chart.",
+"...Well, about that. Marketing drew the chart."
+],
+[
+"...Maybe we'll set a daily study time together first.",
+"...Then I'll start by setting a daily study time with my kid."
+],
+[
+"(Lin is moved to odd jobs. Later he leaves, and takes his comparison method with him.)",
+"(Lin is moved to odd jobs. Later he leaves, and takes his whole comparison method with him.)"
+],
+[
+"...Fine. Next year we'll draw lots for half the staff and compare first.",
+"...Fine. Next year we'll pick half the staff by lottery to take the class, and compare first."
+],
+[
+"(Next year everyone must attend. Every meeting room is booked at lunch.)",
+"(Next year the whole company must attend meditation class. Every meeting room is taken at lunch.)"
+],
+[
+"(The report says \"crashes down two-thirds\". Next year every worst junction gets a camera, and the budget doubles.)",
+"(The report says \"crashes down two-thirds\". Next year every worst junction gets a camera, and the bill comes to twice the budget.)"
+],
+[
+"So ice cream makes people drown. From tomorrow, I'm banning ice cream!",
+"So ice cream makes people drown. Starting tomorrow, I'm banning ice cream in the whole town!"
+],
+[
+"(You don't negotiate. Years later, someone with reusable rockets cuts the price to a fraction.)",
+"(You don't negotiate. Years later, someone with reusable rockets cuts the price to well under half.)"
+],
+[
+"(Convinced he's not interested, you never contact him again. Nobody actually knows what he thought.)",
+"(Convinced he's not interested, you never contact him again. To this day, nobody knows what he thought.)"
+],
+[
+"(Next year every junction gets a camera. Crashes stay the same; the money is gone.)",
+"(Next year every junction gets a camera. Crashes stay the same as always. A big pile of money is gone.)"
+],
+[
+"一个关于「先查一查再相信」的小游戏",
+"一个教你「先查一查再相信」的小游戏"
+],
+[
+"你会先把线索查够，再下判断，而且常常对。很好，你是这个镇上少数正常的人。",
+"你会先把线索查够，再下判断，而且常常对。恭喜，你是这个镇上少数正常的人之一。"
+],
+[
+"这里有 {n} 个案子。每个案子你只有 <b>{d} 天</b>，查不完的，别想了。<br>挑最有用的线索，然后点一个答案。点了就算数。",
+"这里有 {n} 个案子。每个案子你只有 <b>{d} 天</b>。想全部查完？别想了。<br>挑最有用的线索，然后点一个答案。点了就算数。"
+],
+[
+"只查了 {n} 件事就拍板，还蒙对了。恭喜。下次运气不一定还在。",
+"只查了 {n} 件事就拍板，还蒙对了。恭喜。下次运气不一定还来上班。"
+],
+[
+"分数、星星、答过的题、思维工具都会清空，只剩十字路口开着，教学也会再出现一次。这个动作不能复原。",
+"分数、星星、答过的题、思维工具都会清空，只剩十字路口开着，教学也会再出现一次。清了就回不来了。"
+],
+[
+"那就买药吧！三个疗程，一共九千。",
+"那就买药吧！三个疗程，一共才九千。"
+],
+[
+"对吧！我这就收拾行李，开车出发。",
+"对吧！我这就收拾行李，开三天车去。"
+],
+[
+"……也许我该把「多了 1 个人」也说出来。",
+"……也许我该把「其实只多了 1 个人」也说出来。"
+],
+[
+"上个月考试，成绩最差的 5 个小孩，我严厉地说了他们一顿。",
+"上个月考试，成绩最差的 5 个小孩，我狠狠说了他们一顿。"
+],
+[
+"Launch! ...(40 meters above the surface, the signal goes silent.)",
+"Launch! ...(40 metres above the surface, the signal goes silent.)"
+]
+]);
 
 // ================= plain text pass: no dashes =================
 // Dashes read as machine-written. Runs last, over every player-visible string.
@@ -4226,6 +4731,7 @@ function plainStr(s, keepQuotes) {
     s = s.replace(/(, )+/g, ", ").replace(/, ([.!?)])/g, "$1").replace(/^, /, "").replace(/\(, /g, "(");
   }
   if (typeof REWRITE !== "undefined") for (const [a, b] of REWRITE) if (s.includes(a)) s = s.split(a).join(b);
+  if (typeof VOICE !== "undefined" && VOICE.has(s)) s = VOICE.get(s);   // whole-line English voice swaps (sarcasm pass)
   return s.replace(/\u0000(\d+)\u0000/g, (_, i) => keep[+i]);
 }
 const SKIP_KEYS = new Set(["url", "id", "kind", "theme", "go", "tool", "hair", "shirt", "hat", "beard", "npc", "pic"]);
@@ -4242,6 +4748,126 @@ function plainDeep(o, keepQuotes = false, seen = new Set()) {
 plainDeep(SOURCES, true);
 </script>
 <script>
+
+// ================= thinking-tool bingo + gear =================
+// Tools light up squares; each full line is a BINGO worth points. Gear comes from the number of tools you hold:
+// a simulated first-time player earned no gear at all by Evidence Street when gear needed full bingo lines.
+// row 1 = the first two towns, so the first BINGO comes early; every other line mixes towns.
+// "early" (the hardest tool) sits off the diagonals, so it only blocks 2 lines. 31 tools + 5 FREE squares (Mirror Lake was cut to 3 cases).
+const BINGO_GRID = [
+  "anchor", "log", "avail", "steelman", "outside", "prob30",
+  "third", "axis", "unseen", "gapbefore", "absolute", "ev",
+  "measure", "frame", "swapback", "small", "voi", "base",
+  "hundred", "worst", "regress", "sunk", "FREE", "firstp",
+  "FREE", "falsify", "nonresp", "monkey", "FREE", "outcome",
+  "FREE", "indep", "FREE", "early", "denom", "survivor",
+];
+const BINGO_LINES = (() => {
+  const L = [], k = [0, 1, 2, 3, 4, 5];
+  k.forEach(r => L.push(k.map(c => r * 6 + c)));
+  k.forEach(c => L.push(k.map(r => r * 6 + c)));
+  L.push(k.map(i => i * 7), k.map(i => 5 + i * 5));
+  return L;
+})();
+// short labels for the small squares; the full name shows when you tap one
+const TOOL_SHORT = {
+  anchor: ["先自己估", "Guess first"], avail: ["查真实次数", "Real counts"], outside: ["看以前多久", "Past times"],
+  log: ["写下来", "Write it"], steelman: ["对方最好的理由", "Their best case"], prob30: ["一次看不出", "One isn't enough"],
+  third: ["第三个原因", "Third cause"], control: ["对照组", "Control"], random: ["随机分组", "Random"], small: ["人少易极端", "Small swings"],
+  axis: ["先看纵轴", "Axis"], absolute: ["每 100 人", "Per 100"], swapback: ["只换回一样", "Swap one"],
+  ev: ["算平均", "Average"], frame: ["换个说法", "Reframe"], voi: ["打听值不值", "Worth asking?"],
+  base: ["有多常见", "How common"], hundred: ["画 100 人", "100 people"], regress: ["极端会回来", "Bounce back"],
+  worst: ["觉得 vs 查到", "Feel vs found"], sunk: ["今天才开始", "Start today"], confirm: ["好坏都写", "Good & bad"], blind: ["换个人说", "Swap speaker"], ownview: ["看别人做了啥", "Others' moves"], socialp: ["最早的来源", "First source"],
+  firstp: ["拆到最基本", "Break down"], falsify: ["证明自己错", "Prove me wrong"], monkey: ["先训练猴子", "Monkey first"],
+  outcome: ["决定 vs 运气", "Choice vs luck"], indep: ["互不影响吗", "Independent?"], nonresp: ["谁没回答", "Who's silent"], denom: ["本来多少人", "How many first"], survivor: ["没撑下来的", "The ones lost"],
+  early: ["够了就停", "Stop early"], unseen: ["没回来的", "The missing"], gapbefore: ["本来差多少", "Gap before"], measure: ["怎么量的", "How measured"],
+};
+// where each tool can be found: the town of the first case whose clue gives it
+const TOOL_TOWN = (() => {
+  const m = {};
+  Object.entries(DAILY_IDS).forEach(([town, ids]) => ids.forEach(id => (CASE_BY_ID[id]?.actions || []).forEach(a => { if (a.tool && !m[a.tool]) m[a.tool] = town; })));
+  return m;
+})();
+const GEAR = [["侦探帽", "Detective hat"], ["放大镜", "Magnifier"], ["红围巾", "Red scarf"], ["骰子挂饰", "Dice charm"], ["小灯笼", "Lantern"], ["紫披风", "Purple cape"], ["背包火箭", "Rocket pack"], ["歪眼镜", "Crooked glasses"], ["金皇冠", "Gold crown"]];
+const EXTRA_BINGO_PTS = 30;   // points for each full line
+const GEAR_AT = [1, 2, 4, 6, 8, 10, 12, 14, 16];   // tools only come with right answers, so the steps are small   // the Nth piece of gear arrives with this many tools
+
+const bingoLit = i => BINGO_GRID[i] === "FREE" || tools.has(BINGO_GRID[i]);
+const bingoDone = () => BINGO_LINES.filter(l => l.every(bingoLit));
+const gearCount = () => GEAR_AT.filter(n => tools.size >= n).length;
+const toolTown = id => { const c = CHAPTERS.find(x => x.id === TOOL_TOWN[id]); return c ? chapT(c)[0] : t("anyCase"); };
+
+// gear as a picture on its own (24×24), for the shelf and the result card
+const GEAR_ICON = [
+  P => { P(5, 13, 14, 3, "#6b4a2a"); P(8, 6, 8, 7, "#8a5a32"); P(8, 11, 8, 2, "#c43c3c"); },
+  P => { P(9, 4, 10, 2, "#ffcf70"); P(9, 14, 10, 2, "#ffcf70"); P(7, 6, 2, 8, "#ffcf70"); P(19, 6, 2, 8, "#ffcf70"); P(9, 6, 10, 8, "#bfe6ff"); P(11, 7, 2, 3, "#ffffff"); P(6, 16, 2, 2, "#6b4a2a"); P(4, 18, 2, 2, "#6b4a2a"); P(2, 20, 2, 2, "#6b4a2a"); },
+  P => { P(4, 7, 16, 4, "#ff5a4a"); P(4, 9, 16, 1, "#c43c3c"); P(13, 11, 4, 9, "#ff5a4a"); P(13, 19, 1, 2, "#ffcf70"); P(15, 19, 1, 2, "#ffcf70"); },
+  P => { P(11, 2, 2, 6, "#6b4a2a"); P(6, 8, 12, 12, "#f4e6c8"); P(17, 9, 2, 12, "#d9c9a8"); P(8, 10, 2, 2, "#e8a33a"); P(14, 10, 2, 2, "#e8a33a"); P(11, 13, 2, 2, "#e8a33a"); P(8, 16, 2, 2, "#e8a33a"); P(14, 16, 2, 2, "#e8a33a"); },
+  P => { P(11, 1, 2, 4, "#6b4a2a"); P(7, 5, 10, 2, "#c43c3c"); P(6, 7, 12, 11, "#ffcf70"); P(9, 9, 6, 7, "#fff3cf"); P(7, 18, 10, 2, "#c43c3c"); },
+  P => { P(7, 3, 10, 3, "#7a5fa0"); P(5, 6, 14, 6, "#7a5fa0"); P(3, 12, 18, 9, "#7a5fa0"); P(10, 3, 4, 2, "#ffcf70"); P(5, 12, 1, 9, "#5a3f80"); P(18, 12, 1, 9, "#5a3f80"); },
+  P => { P(9, 2, 6, 3, "#c43c3c"); P(8, 5, 8, 12, "#f4e6c8"); P(10, 8, 4, 3, "#4fb3bd"); P(5, 13, 3, 5, "#c43c3c"); P(16, 13, 3, 5, "#c43c3c"); P(9, 17, 2, 4, "#ffcf70"); P(13, 17, 2, 4, "#ff7a6b"); },
+  P => { P(2, 8, 8, 6, "#1b1730"); P(14, 6, 8, 6, "#1b1730"); P(3, 9, 6, 4, "#7fc8ff"); P(15, 7, 6, 4, "#7fc8ff"); P(10, 9, 4, 2, "#1b1730"); },
+  P => { P(4, 10, 16, 8, "#ffcf70"); P(4, 4, 3, 6, "#ffcf70"); P(10, 2, 4, 8, "#ffcf70"); P(17, 4, 3, 6, "#ffcf70"); P(10, 12, 4, 4, "#ff5a4a"); P(4, 16, 16, 2, "#c9a24a"); },
+];
+// gear on the small walking figure (5 px wide, top-left of the hair at x, y + 1); used on the map and in the towns
+function gearTiny(P, x, y, n) {
+  const has = i => n > i;
+  if (has(5)) { P(x - 1, y + 5, 1, 5, "#7a5fa0"); P(x + 5, y + 5, 1, 5, "#7a5fa0"); }
+  if (has(6)) { P(x + 5, y + 4, 1, 4, "#f4e6c8"); P(x + 5, y + 8, 1, 1, "#ff7a6b"); }
+  if (has(2)) { P(x, y + 5, 5, 1, "#ff5a4a"); P(x + 3, y + 6, 1, 2, "#ff5a4a"); }
+  if (has(3)) P(x + 1, y + 8, 1, 1, "#f4e6c8");
+  if (has(4)) P(x - 2, y + 6, 1, 2, "#ffcf70");
+  if (has(1)) { P(x + 6, y + 4, 2, 2, "#ffcf70"); P(x + 6, y + 6, 1, 1, "#6b4a2a"); }
+  if (has(7)) { P(x, y + 2, 2, 1, "#1b1730"); P(x + 3, y + 1, 2, 1, "#1b1730"); }
+  if (has(0)) { P(x - 1, y - 1, 7, 1, "#6b4a2a"); P(x, y - 3, 5, 2, "#8a5a32"); P(x, y - 2, 5, 1, "#c43c3c"); }
+  if (has(8)) { P(x, y - 4, 5, 1, "#ffcf70"); P(x, y - 5, 1, 1, "#ffcf70"); P(x + 2, y - 5, 1, 1, "#ffcf70"); P(x + 4, y - 5, 1, 1, "#ffcf70"); }
+}
+// gear on the big figure of the profile card (same grid as drawCard's px: head 0..8 wide, 0..9 tall)
+function gearCard(px, n) {
+  const has = i => n > i;
+  if (has(5)) { px(-3, 9, 2, 10, "#7a5fa0"); px(9, 9, 2, 10, "#7a5fa0"); }
+  if (has(6)) { px(-4, 8, 3, 7, "#f4e6c8"); px(-4, 7, 3, 1, "#c43c3c"); px(-4, 15, 1, 2, "#ffcf70"); px(-2, 15, 1, 2, "#ff7a6b"); }
+  if (has(2)) { px(-1, 9, 10, 2, "#ff5a4a"); px(5, 11, 2, 4, "#ff5a4a"); }
+  if (has(3)) { px(1, 14, 2, 2, "#f4e6c8"); px(1, 14, 1, 1, "#e8a33a"); }
+  if (has(4)) { px(-3, 14, 1, 2, "#6b4a2a"); px(-4, 16, 3, 3, "#ffcf70"); }
+  if (has(1)) { px(13, 6, 4, 4, "#ffcf70"); px(14, 7, 2, 2, "#bfe6ff"); px(12, 10, 1, 1, "#6b4a2a"); }
+  if (has(7)) { px(1, 4, 3, 2, "#1b1730"); px(4, 3, 3, 2, "#1b1730"); px(2, 4, 1, 1, "#7fc8ff"); px(5, 3, 1, 1, "#7fc8ff"); }
+  if (has(0)) { px(-2, -1, 12, 1, "#6b4a2a"); px(0, -4, 8, 3, "#8a5a32"); px(0, -2, 8, 1, "#c43c3c"); }
+  if (has(8)) { px(0, -4, 8, 2, "#ffcf70"); px(1, -4, 1, 1, "#9fd8f2"); px(6, -4, 1, 1, "#9fd8f2"); px(3, -3, 2, 1, "#ff5a4a"); }   // the crown replaces the top of the hat
+}
+const gearImg = i => { const cv = document.createElement("canvas"); cv.width = 24; cv.height = 24; GEAR_ICON[i](px(cv.getContext("2d"))); return cv.toDataURL(); };
+
+// the board, the hint and the gear shelf, as HTML
+function bingoBoard(withShelf = true) {
+  const done = bingoDone(), inLine = new Set(done.flat());
+  const open = BINGO_LINES.filter(l => !l.every(bingoLit)).map(l => l.filter(i => !bingoLit(i))).sort((a, b) => a.length - b.length);
+  const near = new Set(open[0] && open[0].length <= 2 ? open[0] : []);
+  const cells = BINGO_GRID.map((id, i) => {
+    if (id === "FREE") return `<div class="bcell free${inLine.has(i) ? " inline" : ""}">${t("bFree")}</div>`;
+    const cls = ["bcell"]; if (tools.has(id)) cls.push("on"); if (inLine.has(i)) cls.push("inline"); if (near.has(i)) cls.push("near");
+    return `<button class="${cls.join(" ")}" data-bcell="${id}">${tools.has(id) ? tc(TOOL_SHORT[id]) : `<span class="q">?</span><span class="where">${toolTown(id)}</span>`}</button>`;
+  }).join("");
+  const hint = !open.length ? t("bAll") : t("bNear", { n: open[0].length }) + open[0].map(i => t("bGo", { w: toolTown(BINGO_GRID[i]), x: toolT(TOOLS.find(x => x.id === BINGO_GRID[i]))[0] })).join(EN_ON() ? "; " : "，") + (EN_ON() ? "." : "。");
+  const g = gearCount();
+  const shelf = withShelf ? `<p class="sub">${t("gearTitle")} ${g} / ${GEAR.length}${g < GEAR.length ? " · " + t("gearNext", { n: GEAR_AT[g] - tools.size }) : ""}</p><div class="shelf">${GEAR.map((x, i) => i < g ? `<div class="slot got"><img src="${gearImg(i)}" alt="">${tc(x)}</div>` : `<div class="slot"><span class="lock">?</span>${t("gearN", { n: i + 1 })}</div>`).join("")}</div>` : "";
+  return `<p class="sub">${t("bingoTitle")} · BINGO ${done.length} / ${BINGO_LINES.length}</p><div class="bboard">${cells}</div><div class="bdetail" id="bdetail" hidden></div><div class="bhint">${hint}</div>${shelf}`;
+}
+// tap a square to read the whole tool and where to find it
+document.addEventListener("click", e => {
+  const c = e.target.closest?.("[data-bcell]"); if (!c) return;
+  const d = document.getElementById("bdetail"); if (!d) return;
+  const id = c.dataset.bcell, [n, desc] = toolT(TOOLS.find(x => x.id === id));
+  d.hidden = false;
+  d.innerHTML = tools.has(id) ? `<b>${n}</b><br>${desc}` : t("bWhere", { w: toolTown(id) });
+});
+// on the result card: new gear (wiggling under a NEW tag) and any BINGO this case completed
+function bingoResult(linesBefore, linesAfter, gearBefore, gearAfter) {
+  const lines = linesAfter - linesBefore;
+  if (lines <= 0 && gearAfter <= gearBefore) return "";
+  const gear = [];
+  for (let i = gearBefore; i < gearAfter; i++) gear.push(`<span class="postcard"><i></i><i></i><i></i><i></i><img src="${gearImg(i)}" alt="${tc(GEAR[i])}"><b class="newtag">${t("newTag")}</b></span><b>${tc(GEAR[i])}</b>`);
+  return `<div class="bingowin">${lines > 0 ? `<div class="bw-t">BINGO${lines > 1 ? " ×" + lines : ""}!</div><div>${t("bExtra", { p: lines * EXTRA_BINGO_PTS })}</div>` : ""}${gear.length ? `<div class="bw-g">${t("newGear")}${gear.join("")}</div>` : ""}</div>`;
+}
 // ================= language =================
 const LANG_KEY = "scout-town-lang";
 let lang;
@@ -4410,7 +5036,7 @@ const lastResult = id => { const h = (prog.history || []).filter(x => x.id === i
 // Each attempt picks a version at random: the claim is wrong (normal), the claim is right (alt),
 // or the clues conflict (mixed, answer "can't tell"). Clues and answers are shuffled; only DAYS days.
 function twisted(c) {
-  const tw = TWIST[c.id] || {}, hard = HARD[c.id], mixed = MIXED[c.id];
+  const tw = TWIST[c.id] || {}, hard = c.pick ? null : HARD[c.id], mixed = MIXED[c.id];   // tap-a-part cases keep their own parts and answers
   const L = EN_ON() ? "en" : "zh", li = L === "en" ? 1 : 0, r = Math.random;
   // three-version cases: each version has its own numbers on the cards and a different right answer
   if (tw.versions) {
@@ -4430,11 +5056,11 @@ function twisted(c) {
   actions = shuffled(actions, r);
   const vi = { normal: 0, alt: 1, mixed: 2 }[variant];
   const opts = hard ? hard.opts[L] : tw.opts ? tw.opts[L] : c.verdict.opts;
-  const truth = hard ? (hard.t[vi] ?? hard.t[0]) : variant === "alt" ? tw.alt.truth : c.verdict.truth;
+  const truth = hard ? (hard.t[vi] ?? hard.t[0]) : variant === "alt" ? tw.alt.truth : c.verdict.truth;   // tap-a-part cases: a list of right parts
   const verdict = { ...c.verdict, opts, truth };
   const explain = variant === "alt" ? { ...c.explain, ...tw.alt[L] }
     : variant === "mixed" ? { ...c.explain, ex: mixed[L], name: t("mixedName"), plain: t("mixedPlain") } : c.explain;
-  return { ...c, days: c.lab ? 3 : DAYS, actions, verdict, explain, alt: variant !== "normal", variant, aha: AHA[c.id]?.[variant]?.[li],
+  return { ...c, days: c.lab ? 3 : DAYS, actions, verdict, explain, alt: variant !== "normal", variant, aha: AHA[c.id]?.[variant]?.[li], react: variant === "alt" ? tw.alt?.react?.[li] : undefined,
     herbWorks: variant === "alt" && tw.alt?.herbWorks, order: opts ? shuffled(opts.map((_, k) => k), r) : null };
 }
 function startCase(i) {
@@ -4520,10 +5146,16 @@ function renderVerdict() {
   $panel.innerHTML = `
     <div class="q">${v.q}</div>
     ${choice}
-    <div class="hint">${t("pickFirst")}</div>
+    ${c.pick ? "" : `<div class="hint">${t("pickFirst")}</div>`}
     <div class="foot" style="grid-template-columns:1fr${c.pick ? " 1fr" : ""}">${c.pick ? `<button class="primary" id="go" ${ready ? "" : "disabled"}>${t("judge")}</button>` : ""}<button class="ghost" id="back">${t("checkMore")}</button></div>`;
   $panel.querySelectorAll("[data-v]").forEach(b => b.onclick = () => { st.verdict = +b.dataset.v; decide(); });
   $panel.querySelectorAll("[data-part]").forEach(b => b.onclick = () => { st.part = +b.dataset.part; drawScene(); renderPanel(); });
+  // the hint says you can also tap the part on the plane itself
+  if (c.pick) document.getElementById("cv").onclick = e => {
+    if (mode !== "verdict") return;
+    const r = e.target.getBoundingClientRect(), hit = planePartAt((e.clientX - r.left) / r.width * 160, (e.clientY - r.top) / r.height * 90);
+    if (hit != null) { st.part = hit; drawScene(); renderPanel(); }
+  };
   document.getElementById("go")?.addEventListener("click", () => decide());
   document.getElementById("back").onclick = () => { mode = "menu"; renderPanel(); };
 }
@@ -4548,7 +5180,7 @@ function paintLine(item, animate) {
   document.getElementById("who").textContent = npcName(item.who);
   const say = document.getElementById("say");
   clearInterval(typing?.iv);
-  const ahead = () => hpos < hist.length - 1 || queue.length > 0;
+  const ahead = () => hpos < hist.length - 1 || queue.length > 0 || !!qthen;   // something still comes after this line
   const finish = () => {
     clearInterval(typing.iv); typing.done = true;
     say.innerHTML = item.text + (ahead() ? `<span class="more">${t("tapMore")}</span>` : "");
@@ -4565,6 +5197,17 @@ document.getElementById("talk").onclick = () => {
   if (!typing.done) return typing.finish();
   if (hpos < hist.length - 1) { hpos++; paintLine(hist[hpos], false); }   // stepping forward through lines already said
   else showNext();
+};
+// the whole conversation so far, in one list (only lines already shown, so nothing is spoiled)
+document.getElementById("logBtn").onclick = e => {
+  e.stopPropagation();
+  if (!$sheet.hidden) return;   // a result or menu is open; don't replace it
+  if (typing && !typing.done) typing.finish();
+  delete $sheet.dataset.lock;
+  openSheet(`<h2>${t("logTitle")}</h2><div class="loglist">${hist.length ? hist.map((x, i) => `<div class="logline${x.ask ? " ask" : ""}"><canvas data-face="${i}" width="14" height="14"></canvas><div><b>${npcName(x.who)}</b>${x.text}</div></div>`).join("") : `<p class="sub">${t("logEmpty")}</p>`}</div><button class="primary" id="closeLog">${t("close")}</button>`);
+  document.querySelectorAll("[data-face]").forEach(cv => face(cv.getContext("2d"), NPC[hist[+cv.dataset.face].who]));
+  document.getElementById("closeLog").onclick = closeSheet;
+  $sheetIn.scrollTop = $sheetIn.scrollHeight;   // start at the newest line
 };
 document.getElementById("prevLine").onclick = e => {
   e.stopPropagation();
@@ -4692,14 +5335,22 @@ function decide() {
   const c = CS[ci];
   const right = c.pick ? c.verdict.truth.includes(st.part) : st.verdict === c.verdict.truth;
   const looked = st.done.size + st.runs.length;
-  const bonus = right ? st.daysLeft * 5 : 0;
+  const realLooks = [...st.done].filter(id => id !== "herring").length + st.runs.length;   // the decoy doesn't count as checking
+  // days left only earn a bonus once you've checked enough for 3 stars, so skipping clues never pays more than checking them
+  const bonus = right && realLooks >= 2 ? st.daysLeft * 5 : 0;
   const gained = (right ? RIGHT_PTS : 0) + bonus;
   score += gained; prog.points = (prog.points || 0) + gained;   // the total is saved; score is just this stop
-  const earned = [];
+  const earned = [], linesBefore = bingoDone().length, gearBefore = gearCount();
   const addTool = id => { if (!tools.has(id)) { tools.add(id); earned.push(id); } };
-  c.actions?.forEach(a => { if (a.tool && st.done.has(a.id)) addTool(a.tool); });
-  st.toolsHere?.forEach(addTool);
-  if (right && st.daysLeft > 0 && looked >= 1) addTool("early");   // stopping early only counts if you actually looked first
+  // a tool means you used that move well, so it only counts when the answer is right
+  const usedTools = [...new Set([...(c.actions || []).filter(a => a.tool && st.done.has(a.id)).map(a => a.tool), ...(st.toolsHere || [])])];
+  if (right) usedTools.forEach(addTool);
+  const missedTools = right ? [] : usedTools.filter(id => !tools.has(id));
+  if (bonus > 0) addTool("early");   // stopping early only counts if you actually looked first
+  const linesAfter = bingoDone().length, gearAfter = gearCount();
+  const newLines = linesAfter - linesBefore;   // each full bingo line is worth points
+  if (newLines > 0) { score += newLines * EXTRA_BINGO_PTS; prog.points += newLines * EXTRA_BINGO_PTS; }
+  if (newLines > 0 || gearAfter > gearBefore) setTimeout(() => sfx.star(3), 1700);
   save();
   const needsCheck = !!TWIST[c.id]?.alt || !!TWIST[c.id]?.versions || !!MIXED[c.id];   // only these cases can flip, so only here does not checking mean guessing
   results.push({ right, gained, overconf: looked <= 1 && (needsCheck || !right) });
@@ -4708,30 +5359,41 @@ function decide() {
   $panel.innerHTML = "";
   right ? sfx.right() : sfx.wrong();
   burst(right, gained);
-  const realLooks = [...st.done].filter(id => id !== "herring").length;   // the decoy doesn't count as checking
   st.stars = right ? (realLooks >= 2 ? 3 : 2) : 0;   // shown as a badge on the result card
   if (earned.length) setTimeout(sfx.tool, 1300);
   const R = EN_ON() ? EN.reactions : reactions;
   // the written reactions assume the claimant was wrong; when the claim was right this time (answer 0), react to that instead
-  const claimTrue = !c.pick && c.verdict.truth === 0;
+  // tap-a-part cases: the claim is right when the right parts are exactly the ones the claimant wants
+  const claimTrue = c.pick ? String(c.verdict.truth) === String(c.verdict.claimParts) : c.verdict.truth === 0;
+  const sidedWithClaim = c.pick ? !!c.verdict.claimParts?.includes(st.part) : st.verdict === 0;
   // the written "wrong" reactions describe what happens when you believe the claimant (answer 0);
   // a wrong answer that didn't side with them gets a neutral line instead
-  const line = claimTrue ? t(st.verdict === 0 ? "claimRightAgree" : "claimRightDisagree")
-    : !right && st.verdict !== 0 ? t("wrongOther")
+  // a case where the claimant takes no side (verdict.noClaim) just reacts to how your pick turned out
+  const line = c.verdict.noClaim ? (c.react || R[c.id])[right ? 0 : 1]
+    : claimTrue ? t(sidedWithClaim ? "claimRightAgree" : "claimRightDisagree")
+    : !right && !sidedWithClaim ? t("wrongOther")
     : c.react?.[right ? 0 : 1] || R[c.id]?.[right ? 0 : 1] || tc(UI.fallbackR)[right ? 0 : 1];
-  talk(c.npc, [line]);
+  // the result card waits until the character has finished talking and you've had time to read it; tapping the line skips ahead
+  talk(c.npc, [line], () => reveal());
   const e = c.explain;
   $sheet.dataset.lock = "1";
-  setTimeout(() => {
+  const readMs = Math.min(4500, 1300 + line.length * (EN_ON() ? 25 : 60));
+  const waitForLine = () => { if (st.resultShown) return; if (typing && !typing.done) return setTimeout(waitForLine, 150); setTimeout(reveal, readMs); };
+  setTimeout(waitForLine, 300);
+  function reveal() {
+    if (st.resultShown) return;
+    st.resultShown = true;
     st.resultHtml = `
     <div class="${right ? "res-good" : "res-bad"}">${right ? t("right") : t("wrong")} · ${gained >= 0 ? "+" : ""}${gained}${bonus ? (EN_ON() ? ` (${t("early")} +${bonus})` : `（${t("early")} +${bonus}）`) : ""}</div>
     <div class="restabs"><button class="on" data-tab="main">${t("tabResult")}</button><button data-tab="more">${t("tabMore")}</button></div>
     <div class="respane" data-pane="main">
+    ${bingoResult(linesBefore, linesAfter, gearBefore, gearAfter)}
     ${c.aha ? `<div class="aha">${c.aha}</div>` : ""}
     ${fooledLine(c, right)}
     <p class="sub">${t("callIt")}</p><div class="name">${e.name}</div>
     <div style="font-size:14.5px">${e.plain}</div>
     ${earned.map(id => { const [n, d] = toolT(TOOLS.find(x => x.id === id)); return `<div class="gotool">${t("gotTool")}<b>${n}</b><br>${d}</div>`; }).join("")}
+    ${missedTools.length ? `<div class="calib">${t("toolLost", { x: missedTools.map(id => toolT(TOOLS.find(x => x.id === id))[0]).join(EN_ON() ? "\", \"" : "」「") })}</div>` : ""}
     ${sourceBlock(c.id, c.variant)}
     </div>
     <div class="respane" data-pane="more" hidden>
@@ -4742,7 +5404,7 @@ function decide() {
     <p class="sub">${t("tapBehind")}</p>
     <div class="row2"><button class="ghost" id="review">${t("reviewBtn")}</button><button class="primary" id="nextCase">${ci < CS.length - 1 ? t("nextCase") : t("endStop")}</button></div>`;
     showResult();
-  }, reduced() ? 0 : 1200);
+  }
 }
 // a quick reaction over the scene the moment you answer: stars and points when right, a shake when wrong
 function burst(right, gained) {
@@ -4776,11 +5438,14 @@ function reviewCase() {
 }
 function renderReview() {
   const c = CS[ci], v = c.verdict;
-  const mark = i => i === v.truth ? "✓ " : i === st.verdict ? "✗ " : "";
+  // tap-a-part cases: the parts are the choices, and more than one can be right
+  const list = c.pick ? v.parts : v.opts, mine = c.pick ? st.part : st.verdict;
+  const isTrue = i => c.pick ? v.truth.includes(i) : i === v.truth;
+  const mark = i => isTrue(i) ? "✓ " : i === mine ? "✗ " : "";
   $panel.innerHTML = `
     <div class="q">${v.q}</div>
-    <div class="opts${v.opts.length === 3 ? " three" : ""} review">${(c.order || v.opts.map((_, i) => i)).map(i => `<button disabled class="${i === v.truth ? "on" : ""}${i === st.verdict && i !== v.truth ? " mine" : ""}">${mark(i)}${v.opts[i]}</button>`).join("")}</div>
-    <div class="hint">${t(st.verdict === v.truth ? "reviewRight" : "reviewWrong")}</div>
+    <div class="opts${list.length >= 3 ? " three" : ""} review">${(c.pick ? list.map((_, i) => i) : c.order || list.map((_, i) => i)).map(i => `<button disabled class="${isTrue(i) ? "on" : ""}${i === mine && !isTrue(i) ? " mine" : ""}">${mark(i)}${list[i]}</button>`).join("")}</div>
+    <div class="hint">${t(isTrue(mine) ? "reviewRight" : "reviewWrong")}</div>
     <div class="foot"><button class="ghost" id="nb2">${t("seeNotes")}</button><button class="primary" id="backRes">${t("backResult")}</button></div>`;
   document.getElementById("nb2").onclick = openNotes;
   document.getElementById("backRes").onclick = showResult;
@@ -4803,7 +5468,6 @@ const reactions = {
   house: ["……好吧，你去验吧。我先帮你留着。", "签好了！恭喜！……下雨天记得放个盆。"],
 };
 Object.assign(reactions, REACT_MORE); plainDeep(reactions);
-function toolsGrid() { return `<div class="tools">${TOOLS.map(tl => { const [n, d] = toolT(tl); return tools.has(tl.id) ? `<div class="on"><b>${n}</b><br>${d}</div>` : `<div class="off">？？？</div>`; }).join("")}</div>`; }
 function endChapter() {
   const nxtId = ORDER[ORDER.indexOf(chap.id) + 1], justUnlocked = nxtId && townDone(chap.id) ? CHAPTERS.find(c => c.id === nxtId) : null;
   if (justUnlocked) setTimeout(() => sfx.star(3), 400);
@@ -4815,13 +5479,12 @@ function endChapter() {
   const title = tc(right === played && !over ? T.pro : right === played ? T.lucky : over >= 2 ? T.soldier : right >= 2 ? T.junior : T.lost);
   $sheet.dataset.lock = "1";
   openSheet(`<p class="sub">${chapT(chap)[0]}${t("stopDone")}</p><h2>${title}</h2>
-    <div class="stars">${"★".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+    <div class="starrow"><div class="stars">${"★".repeat(stars)}${"☆".repeat(3 - stars)}</div>${justUnlocked ? postcard(justUnlocked) : ""}</div>
     <div>${t("stopSummary", { r: right, n: played, s: score })}</div>
     ${justUnlocked ? `<div class="gotool">${t("unlockNew", { t: chapT(justUnlocked)[0] })}</div>` : ""}
     ${right === played && over ? `<div class="calib">${t("luckyWhy", { o: over })}</div>` : over ? `<div class="calib">${t("overNote", { o: over })}</div>` : ""}
     <button class="ghost" id="profB">${t("seeProfile")}</button>
-    <p class="sub">${t("tools")} ${tools.size} / ${TOOLS.length}</p>
-    ${toolsGrid()}
+    ${bingoBoard()}
     <div class="row2"><button class="ghost" id="again">${t("again")}</button><button class="primary" id="toMap">${t("backMap")}</button></div>`);
   document.getElementById("again").onclick = () => enterChapter(chap);
   document.getElementById("toMap").onclick = () => showMap(nextOpen(chap.id));
@@ -4922,9 +5585,11 @@ function drawCard(cv, P) {
   // picture window with you in it
   R(44, 136, W - 88, 250, col); R(52, 144, W - 104, 234, "#9fd8f2"); R(52, 290, W - 104, 88, "#8bd08a");
   for (let i = 0; i < 5; i++) R(80 + i * 96, 300 + (i % 2) * 20, 30, 6, "#7cc47a");
-  const px = (x, y, w, h, c) => R(260 + x * 10, 170 + y * 10, w * 10, h * 10, c);
+  const top = gearCount() ? 182 : 170;   // room for a hat inside the picture window
+  const px = (x, y, w, h, c) => R(260 + x * 10, top + y * 10, w * 10, h * 10, c);
   px(0, 0, 8, 2, "#3b2b20"); px(0, 2, 8, 7, "#f2c9a0"); px(2, 4, 1, 2, "#1b1730"); px(5, 4, 1, 2, "#1b1730"); px(3, 7, 2, 1, "#c45a5a");
-  px(-1, 9, 10, 8, "#4fb3bd"); px(1, 17, 2, 4, "#110e22"); px(5, 17, 2, 4, "#110e22"); px(9, 10, 4, 5, "#f4e6c8"); px(9, 10, 4, 1, "#ffcf70");
+  px(-1, 9, 10, 8, "#4fb3bd"); px(1, 17, 2, top > 170 ? 3 : 4, "#110e22"); px(5, 17, 2, top > 170 ? 3 : 4, "#110e22"); px(9, 10, 4, 5, "#f4e6c8"); px(9, 10, 4, 1, "#ffcf70");
+  gearCard(px, gearCount());
   // stars
   text("★ " + S.stars + " / " + S.maxStars, W / 2, 420, 26, "#ffcf70", num, "center");
   // stat bars
@@ -4974,7 +5639,7 @@ function showMap(goTo, enterOnArrive, fromXY) {
   bindSnd(() => showMap());
   document.getElementById("profB2").onclick = () => showProfile(() => showMap());
   document.getElementById("helpB").onclick = () => tutorial(0, () => showMap());
-  document.getElementById("toolB").onclick = () => { delete $sheet.dataset.lock; openSheet(`<h2>${t("tools")}</h2>${toolsGrid()}<button class="primary" id="closeS">${t("close")}</button>`); document.getElementById("closeS").onclick = closeSheet; };
+  document.getElementById("toolB").onclick = () => { delete $sheet.dataset.lock; openSheet(`<h2>${t("tools")} ${tools.size} / ${TOOLS.length}</h2>${bingoBoard()}<button class="primary" id="closeS">${t("close")}</button>`); document.getElementById("closeS").onclick = closeSheet; };
   const total = CHAPTERS.reduce((a, c) => a + (prog.stars[starKey(c.id)] || 0), 0), max = CHAPTERS.filter(c => c.open).length * 3;
   $panel.innerHTML = `${langRow()}<div class="langs"><button id="musB" class="${snd.music && snd.on ? "on" : ""}">♪ ${t(snd.music && snd.on ? "musicOn" : "musicOff")}</button></div><div class="maphint">${t("tapHouse")}</div>
     <div class="mapsum"><span>★ <b>${total}</b> / ${max}</span><span>${t("tools")} <b>${tools.size}</b> / ${TOOLS.length}</span><span><b>${prog.points || 0}</b> ${t("pts")}</span></div>
@@ -5008,6 +5673,43 @@ function animMap() {
 // laid out along one winding road in play order: across the top, down the right, back through the middle, then along the bottom
 const MAPXY = { bias: [28, 30], meta: [68, 22], causal: [108, 26], evid: [140, 52], dec: [130, 96], prob: [96, 70], mirror: [52, 84], rocket: [80, 124], trap: [126, 126] };
 const MAP_H = 150;
+// each town's little landmark on the map
+function landmark(P, id, x, y) {
+  const house = (x, y, roof) => { P(x - 6, y - 2, 12, 9, "#f4e6c8"); P(x - 7, y - 5, 14, 4, roof); P(x - 1, y + 2, 3, 5, "#6b4a2a"); };
+  if (id === "mirror") { P(x - 10, y - 4, 20, 10, "#2f78c4"); P(x - 8, y - 6, 16, 14, "#2f78c4"); P(x - 5, y - 2, 6, 1, "#bfe6ff"); P(x + 1, y + 2, 5, 1, "#bfe6ff"); }
+  else if (id === "rocket") { P(x - 2, y - 12, 4, 16, "#f4e6c8"); P(x - 1, y - 15, 2, 3, "#c43c3c"); P(x - 4, y, 2, 5, "#c43c3c"); P(x + 2, y, 2, 5, "#c43c3c"); P(x - 1, y + 4, 2, 2, "#ffcf70"); }
+  else if (id === "meta") { P(x - 2, y - 12, 5, 18, "#f4e6c8"); for (let k = 0; k < 3; k++) P(x - 2, y - 9 + k * 5, 5, 2, "#c43c3c"); P(x - 3, y - 15, 7, 3, "#ffcf70"); }
+  else if (id === "dec") { P(x - 8, y - 10, 6, 16, "#6b6f8a"); P(x - 1, y - 14, 7, 20, "#565a78"); P(x + 6, y - 6, 5, 12, "#6b6f8a"); for (let k = 0; k < 4; k++) P(x + 1, y - 12 + k * 4, 2, 2, "#ffcf70"); }
+  else if (id === "causal") {   // dominoes, each one knocking over a bigger one
+    const C = "#f4e6c8", S = "#c9b89a", D = "#1b1730";
+    P(x - 11, y + 6, 22, 2, "#c43c3c");
+    for (let k = 0; k < 7; k++) P(x - 10 + (k >> 1), y + 5 - k, 3, 1, k < 2 ? S : C);
+    [[x - 5, y - 2, 3, 8], [x - 1, y - 5, 4, 11], [x + 4, y - 9, 5, 15]].forEach(([dx, dy, w, h]) => { P(dx, dy, w, h, C); P(dx + w - 1, dy, 1, h, S); P(dx + (w >> 1) - (w > 3 ? 1 : 0), dy + 2, 1, 1, D); P(dx + (w >> 1) - (w > 3 ? 1 : 0), dy + h - 3, 1, 1, D); });
+  } else if (id === "evid") {   // a detective's shop with a big magnifying glass on the roof
+    P(x - 9, y - 3, 12, 10, "#f4e6c8"); P(x - 10, y - 6, 14, 3, "#3a7fbf");
+    for (let k = 0; k < 6; k++) P(x - 9 + k * 2, y - 3, 1, 2, "#3a7fbf");
+    P(x - 7, y + 2, 3, 5, "#6b4a2a"); P(x - 2, y, 4, 3, "#7fc8ff");
+    P(x + 1, y - 7, 1, 1, "#6b4a2a"); P(x + 2, y - 8, 1, 1, "#6b4a2a"); P(x + 3, y - 9, 1, 1, "#6b4a2a");
+    P(x + 4, y - 15, 5, 1, "#ffcf70"); P(x + 4, y - 9, 5, 1, "#ffcf70"); P(x + 3, y - 14, 1, 5, "#ffcf70"); P(x + 9, y - 14, 1, 5, "#ffcf70");
+    P(x + 4, y - 14, 5, 5, "#bfe6ff"); P(x + 5, y - 13, 1, 2, "#ffffff");
+  } else if (id === "prob") {   // a house shaped like a die, with a small die beside it
+    P(x - 5, y - 7, 11, 2, "#fffaf0"); P(x - 6, y - 5, 11, 12, "#f4e6c8"); P(x + 5, y - 6, 2, 12, "#d9c9a8");
+    P(x - 4, y - 3, 2, 2, "#e8a33a"); P(x + 1, y - 3, 2, 2, "#e8a33a"); P(x, y - 7, 2, 1, "#e8a33a");
+    P(x - 2, y + 2, 3, 5, "#6b4a2a");
+    P(x - 11, y + 2, 4, 4, "#e8a33a"); P(x - 10, y + 3, 1, 1, "#ffffff"); P(x - 8, y + 4, 1, 1, "#ffffff");
+  } else if (id === "bias") {   // a crooked cottage that leans to one side
+    for (let r = 0; r < 10; r++) P(x - 6 + Math.floor(r / 3), y + 6 - r, 11, 1, "#f4e6c8");
+    [[15, -5], [11, -6], [7, -7], [3, -8]].forEach(([w, dy], i) => P(x + 3 - (w >> 1), y + dy, w, 1, "#7a5fa0"));
+    P(x + 5, y - 10, 2, 4, "#6b4a2a");
+    P(x - 4, y + 2, 3, 5, "#6b4a2a"); P(x + 1, y - 1, 3, 3, "#7fc8ff"); P(x + 2, y, 1, 1, "#1b1730");
+  } else if (id === "trap") {   // a signpost pointing two ways at a crossroads
+    P(x - 10, y + 5, 21, 2, "#f4e6c8"); P(x - 1, y - 2, 3, 9, "#f4e6c8");
+    P(x, y - 12, 2, 17, "#6b4a2a");
+    P(x + 2, y - 11, 7, 3, "#2f9a6a"); P(x + 9, y - 10, 1, 1, "#2f9a6a");
+    P(x - 7, y - 6, 7, 3, "#e8a33a"); P(x - 8, y - 5, 1, 1, "#e8a33a");
+    P(x - 1, y - 15, 4, 1, "#ffcf70"); P(x + 2, y - 14, 1, 1, "#ffcf70"); P(x + 1, y - 13, 1, 1, "#ffcf70");
+  } else house(x, y, "#c43c3c");
+}
 function drawMap() {
   const g = document.getElementById("cv").getContext("2d"), P = px(g);
   const tree = (x, y) => { P(x + 1, y, 3, 2, "#2f7a3a"); P(x, y + 2, 5, 2, "#3a8a44"); P(x + 2, y + 4, 1, 2, "#6b4a2a"); };
@@ -5027,14 +5729,9 @@ function drawMap() {
   const road = (a, b) => { const A = MAPXY[a], B = MAPXY[b], n = 50; for (let k = 0; k <= n; k++) { if (k % 3 === 2) continue; P(Math.round(A[0] + (B[0] - A[0]) * k / n), Math.round(A[1] + (B[1] - A[1]) * k / n), 2, 2, "#f4e6c8"); } };
   ORDER.slice(1).forEach((id, i) => road(ORDER[i], id));   // one road, in the order you play
   // towns: a different little landmark for each
-  const house = (x, y, roof) => { P(x - 6, y - 2, 12, 9, "#f4e6c8"); P(x - 7, y - 5, 14, 4, roof); P(x - 1, y + 2, 3, 5, "#6b4a2a"); };
   CHAPTERS.forEach(c => {
     const [x, y] = MAPXY[c.id] || [c.x, c.y];
-    if (c.id === "mirror") { P(x - 10, y - 4, 20, 10, "#2f78c4"); P(x - 8, y - 6, 16, 14, "#2f78c4"); P(x - 5, y - 2, 6, 1, "#bfe6ff"); P(x + 1, y + 2, 5, 1, "#bfe6ff"); }
-    else if (c.id === "rocket") { P(x - 2, y - 12, 4, 16, "#f4e6c8"); P(x - 1, y - 15, 2, 3, "#c43c3c"); P(x - 4, y, 2, 5, "#c43c3c"); P(x + 2, y, 2, 5, "#c43c3c"); P(x - 1, y + 4, 2, 2, "#ffcf70"); }
-    else if (c.id === "meta") { P(x - 2, y - 12, 5, 18, "#f4e6c8"); for (let k = 0; k < 3; k++) P(x - 2, y - 9 + k * 5, 5, 2, "#c43c3c"); P(x - 3, y - 15, 7, 3, "#ffcf70"); }
-    else if (c.id === "dec") { P(x - 8, y - 10, 6, 16, "#6b6f8a"); P(x - 1, y - 14, 7, 20, "#565a78"); P(x + 6, y - 6, 5, 12, "#6b6f8a"); for (let k = 0; k < 4; k++) P(x + 1, y - 12 + k * 4, 2, 2, "#ffcf70"); }
-    else house(x, y, { causal: "#c43c3c", prob: "#e8a33a", bias: "#7a5fa0", evid: "#3a7fbf", trap: "#2f9a6a" }[c.id] || "#c43c3c");
+    landmark(P, c.id, x, y);
     if (!townOpen(c)) {   // locked towns sit under a pixel cloud with a small gold padlock
       g.globalAlpha = .92;
       [[-11, -6, 22, 10], [-8, -10, 16, 16], [-13, -3, 26, 6], [-5, -13, 10, 4]].forEach(([dx, dy, w, h]) => P(x + dx, y + dy, w, h, "#e9e3f5"));
@@ -5051,6 +5748,7 @@ function drawMap() {
   const mx = Math.round(A[0] + (B[0] - A[0]) * mapT) - 2, my = Math.round(A[1] + (B[1] - A[1]) * mapT) + 7;
   const bob = mapT < 1 && Math.floor(mapT * 40) % 2;
   P(mx, my - 1, 5, 2, "#3b2b20"); P(mx, my, 5, 5, "#f2c9a0"); P(mx, my + 5, 5, 4, "#4fb3bd"); P(mx + 1, my + 9, 1, bob ? 1 : 2, "#110e22"); P(mx + 3, my + 9, 1, bob ? 2 : 1, "#110e22");
+  gearTiny(P, mx, my, gearCount());
   document.getElementById("tags").innerHTML = CHAPTERS.map(c => { const [x, y] = MAPXY[c.id]; return `<span class="tag town${c.id === mapAt ? " here" : ""}${townOpen(c) ? "" : " locked"}" style="left:${x / 1.6}%;top:${(y + 10) / MAP_H * 100}%">${townOpen(c) ? "" : LOCK_SVG}${chapT(c)[0]}${townOpen(c) && leftIn(c) ? `<b class="left">${leftIn(c)}</b>` : ""}</span>`; }).join("");
 }
 
@@ -5058,8 +5756,8 @@ function drawMap() {
 function drawScene() {
   const g = document.getElementById("cv").getContext("2d"), P = px(g), c = CS[ci];
   document.getElementById("tags").innerHTML = "";
-  if (c.id === "ice") drawIce(P);
-  else if (c.id === "plane") drawPlane(P);
+  if (c.id === "ice" && !c.spots) drawIce(P);
+  else if (c.id === "plane" && !c.spots) drawPlane(P);
   else if (c.id === "herb") drawHerb(P);
   else drawSpots(P, c);
   drawMe(P);
@@ -5069,16 +5767,23 @@ function drawMe(P) {
   P(x, y - 1, 5, 2, "#3b2b20"); P(x, y, 5, 5, "#f2c9a0"); P(x + 1, y + 2, 1, 1, "#1b1730"); P(x + 3, y + 2, 1, 1, "#1b1730");
   P(x, y + 5, 5, 5, "#4fb3bd"); P(x + 1, y + 10, 1, walk ? 2 : 3, "#110e22"); P(x + 3, y + 10, 1, walk ? 3 : 2, "#110e22");
   if (!st.walking) { P(x + 6, y + 2, 3, 4, "#f4e6c8"); P(x + 6, y + 2, 3, 1, "#ffcf70"); }
+  gearTiny(P, x, y, gearCount());
 }
 function person(P, x, y, shirt, hair = "#3b2b20") { P(x, y, 4, 4, "#f2c9a0"); P(x, y - 1, 4, 1, hair); P(x, y + 4, 4, 4, shirt); P(x, y + 8, 1, 2, "#110e22"); P(x + 3, y + 8, 1, 2, "#110e22"); }
 const tag = (text, left, top, extra = "") => `<span class="tag" style="left:${left}%;top:${top}%;${extra}">${text}</span>`;
 // generic scene for chapters 2 and 3: a backdrop, places to visit, and what you have revealed
 function drawSpots(P, c) {
+  drawPlace(P, c, true);
+  // when a chart is showing on top of the scene, hide the place names so they don't collide
+  if (!overlay(P, c)) document.getElementById("tags").innerHTML += c.spots.map(s => tag(s.label, s.x / 1.6, s.kind === "hospital" ? 22 : 30)).join("");
+}
+// backdrop, places and the local person; also used for the postcard of a newly unlocked town
+function drawPlace(P, c, me) {
   if (c.theme === "lake") {
     P(0, 0, 160, 90, "#c9e4f2"); P(0, 26, 160, 22, "#8bd08a"); P(0, 40, 160, 26, "#2f78c4");
     for (let i = 0; i < 8; i++) P((i * 21) % 150 + 4, 44 + (i * 5) % 18, 10, 1, "#9fe3ea");
     P(0, 62, 160, 28, "#8bd08a");
-    const mx = Math.round(st.meX); P(mx, 50, 5, 5, "#9fc7e8"); P(mx, 55, 5, 5, "#7fb2ff");   // your reflection
+    const mx = Math.round(st.meX); if (me) P(mx, 50, 5, 5, "#9fc7e8"), P(mx, 55, 5, 5, "#7fb2ff");   // your reflection
   } else if (c.theme === "launch") {
     P(0, 0, 160, 90, "#ffb38a"); P(0, 18, 160, 14, "#ffcf9a"); P(0, 32, 160, 58, "#e0b878"); P(0, 60, 160, 30, "#d0a868");
     P(132, 8, 3, 44, "#6b4a2a"); for (let k = 0; k < 7; k++) P(130, 10 + k * 6, 7, 1, "#6b4a2a");
@@ -5115,8 +5820,12 @@ function drawSpots(P, c) {
   };
   c.spots.forEach(s => sp[s.kind]?.(s.x));
   const n = NPC[c.npc]; person(P, c.spots[0].x + 10, 50, n.shirt, n.hair);
-  // when a chart is showing on top of the scene, hide the place names so they don't collide
-  if (!overlay(P, c)) document.getElementById("tags").innerHTML += c.spots.map(s => tag(s.label, s.x / 1.6, s.kind === "hospital" ? 22 : 30)).join("");
+}
+// the new town's landmark on its own, no background
+function postcard(ch) {
+  const cv = document.createElement("canvas"); cv.width = 24; cv.height = 24;
+  landmark(px(cv.getContext("2d")), ch.id, 12, 16);
+  return `<span class="postcard"><i></i><i></i><i></i><i></i><img src="${cv.toDataURL()}" alt="${chapT(ch)[0]}"><b class="newtag">${t("newTag")}</b></span>`;
 }
 function overlay(P, c) {
   const tags = document.getElementById("tags"), E = EN_ON() ? EN.cases[c.id] : null, sm = "font-size:12px;font-family:var(--f-body);background:#0f0c1de6;padding:1px 6px;text-shadow:none;max-width:96%;white-space:normal;text-align:center";
@@ -5193,6 +5902,13 @@ function drawIce(P) {
   const L = caseTags("ice") || ["公告栏", "气温", "救生员", "冰淇淋"];
   document.getElementById("tags").innerHTML = tag(L[0], 40, 18) + tag(L[1], 6, 24) + tag(L[2], 90, 9) + tag(L[3], 23, 24);
 }
+// which part of the drawn plane a tap lands on (same boxes as drawPlane; engines first, they sit on the wings)
+function planePartAt(x, y) {
+  const inR = ([rx, ry, w, h]) => x >= rx && x < rx + w && y >= ry && y < ry + h;
+  const parts = [[3, [[52, 18, 10, 6], [98, 18, 10, 6], [52, 52, 10, 6], [98, 52, 10, 6]]], [4, [[118, 32, 18, 10]]], [1, [[16, 28, 18, 18], [12, 26, 8, 22]]], [2, [[32, 32, 86, 10]]], [0, [[30, 22, 100, 10], [30, 42, 100, 10]]]];
+  for (const [i, boxes] of parts) if (boxes.some(inR)) return i;
+  return null;
+}
 function drawPlane(P) {
   P(0, 0, 160, 90, "#2b4a6b"); for (let i = 0; i < 12; i++) P((i * 37) % 160, (i * 23) % 70, 8, 2, "#3a5d82");
   P(0, 70, 160, 20, "#5b6b4a");
@@ -5206,6 +5922,7 @@ function drawPlane(P) {
     for (let k = 0; k < 26; k++) hole(34 + r() * 92, (r() < .5 ? 23 : 43) + r() * 7, "#ff5a5a");
     for (let k = 0; k < 10; k++) hole(13 + r() * 18, 27 + r() * 18, "#ff5a5a");
     for (let k = 0; k < 7; k++) hole(36 + r() * 78, 33 + r() * 7, "#ff5a5a");
+    for (let k = 0; k < 3; k++) hole(120 + r() * 12, 33 + r() * 7, "#ff5a5a");   // a few on the cockpit too: only the engines come back clean
   }
   if (st.reveal.has("wreck")) {
     for (let k = 0; k < 10; k++) hole((r() < .5 ? 53 : 99) + r() * 7, (r() < .5 ? 18 : 52) + r() * 4, "#ffcf70");
