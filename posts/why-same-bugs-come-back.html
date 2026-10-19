@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why AI-built systems keep getting the same bugs, and why tests didn't catch them · Yu Han Tey</title>
+<meta name="description" content="I fixed 103 bugs in five weeks of building with AI. 70 were repeats, and only about 1 in 7 repeats was a badly worded prompt. The five habits behind them, why tests and evals missed them, and what I do now. By Yu Han Tey, AI agent engineer in Singapore.">
+<link rel="canonical" href="https://yuhantey.github.io/posts/why-same-bugs-come-back.html">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Why AI-built systems keep getting the same bugs, and why tests didn't catch them",
+  "datePublished": "2026-10-19",
+  "author": {
+    "@type": "Person",
+    "name": "Yu Han Tey",
+    "url": "https://yuhantey.github.io/",
+    "sameAs": ["https://github.com/yuhantey", "https://dev.to/yuhantey", "https://www.linkedin.com/in/yuhantey"],
+    "jobTitle": "AI Agent Engineer",
+    "address": { "@type": "PostalAddress", "addressLocality": "Singapore" }
+  },
+  "about": ["AI-assisted software engineering", "LLM evaluation", "Software testing", "AI agents"],
+  "mainEntityOfPage": "https://yuhantey.github.io/posts/why-same-bugs-come-back.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why do systems built with AI keep getting the same bugs?",
+      "acceptedAnswer": { "@type": "Answer", "text": "In my case, most repeat bugs were not badly worded prompts. Only about 1 in 7 was. The rest came from patching symptoms instead of causes, testing a fix only on its own bug, missing a second path for the same data, tests that don't follow real use, and failures that stay silent." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why don't unit tests and evals catch AI-written bugs?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Because they test something easier than real use: only the case that was fixed, a fake model instead of the real API, parts connected by hand only in the test, or a few small examples when real data is bigger. The bug lives in the gap between what the test checks and what production does." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<main>
+<nav><a href="../">Yu Han Tey</a></nav>
+<div class="kicker">Building with AI</div>
+<h1>Why AI-built systems keep getting the same bugs, and why tests didn't catch them</h1>
+<div class="meta">Yu Han Tey · 19 October 2026 · 5 min read</div>
+
+<p class="lead">For a while I was vibe coding: AI wrote the code, and I trusted it fully without checking much myself.</p>
+<p class="lead">In five weeks I fixed 103 bugs. 70 of them were repeats: the same root cause, back in a new form. Every repeat meant another pull request.</p>
+
+<div class="answer">
+<div class="label">Short answer</div>
+<p>Only about 1 in 7 repeats was a badly worded prompt. The rest came from five habits, like patching the symptom or testing a fix only on its own bug.</p>
+<p>Tests didn't catch them because tests checked something easier than real use.</p>
+</div>
+
+<h2><span class="sec">01</span>How I sorted them</h2>
+<p>I went back through every bug and sorted it by its root cause, not by where it showed up. "The page said updating forever" is where. "Two timestamps came from two different clocks" is the cause.</p>
+<p>Then I kept only the bugs that came back in a new form. That left 70.</p>
+
+<p class="insight">Only about 1 in 7 repeats was a badly worded prompt.</p>
+
+<p>Most came from not thinking a case through.</p>
+
+<p>Other developers describe the same loop, and it shows up across many popular coding tools. In one team, a bug had been "fixed" three times, each time with green tests, while the real cause stayed untouched. The agent was right that the symptom would go away. It was wrong about why.</p>
+
+<h2><span class="sec">02</span>The five habits behind the repeats</h2>
+<ol class="rules">
+<li><b>I patched the symptom, not the cause</b>One problem took 11 pull requests before I found the real cause: a single setting.</li>
+<li><b>A fix was tested only on its own bug</b>So it broke something next to it, and that became the next bug.</li>
+<li><b>I fixed one path and missed the others</b>The same data could come in through a second door I hadn't checked.</li>
+<li><b>Tests didn't take the path real use takes</b>So a fix passed its test while the bug was still there.</li>
+<li class="wide"><b>Failures were silent</b>Problems showed up late and one at a time, so each one became its own fix.</li>
+</ol>
+
+<h2><span class="sec">03</span>Why the tests and evals didn't catch them</h2>
+<p>Every one of these fixes had a passing test. The tests weren't wrong. They checked something easier than real use.</p>
+
+<pre><code>What the test checked                  Where the bug was
+─────────────────────────────────      ─────────────────────────────
+the case I just fixed             ✓    the case next to it            ✗
+a fake model                      ✓    the real model's API           ✗
+parts connected by hand in test   ✓    parts connected by the real app ✗
+5 similar examples                ✓    13 in real data                ✗</code></pre>
+
+<div class="story">
+<h3>Only the case I fixed</h3>
+<p>A new rule removed an old preference when a new one contradicted it. Its tests were all about real contradictions, so they passed. Nobody wrote a test for two preferences that only <i>look</i> alike. That was exactly the case that broke.</p>
+</div>
+
+<div class="story">
+<h3>A fake model instead of the real one</h3>
+<p>To keep tests fast, the model was replaced with a fake that returned a fixed answer. The fake accepted an output format that the real model's API rejected. Every test passed; every real call failed.</p>
+</div>
+
+<div class="story">
+<h3>A test path that production doesn't take</h3>
+<p>My eval sent requests one way, and production sent them another. In production, the model skipped an optional field it never skipped in the eval. In another case, the test connected two parts by hand, in the right order. The real app connects them its own way. If the app's order ever changed, the test would still pass, because it never used the app's version.</p>
+</div>
+
+<div class="story">
+<h3>Test data smaller than real data</h3>
+<p>The biggest group of similar items in my test cases had 5. Real data had 13. A check that worked on 5 broke on 13.</p>
+</div>
+
+<p class="lesson">A passing test proves the test passed. It only proves the feature works if the test looks like real use.</p>
+
+<h2><span class="sec">04</span>How I stop the repeats</h2>
+<div class="fixmap">
+<div class="fm-row"><div class="fm-cause">I patched the symptom</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Find the cause first</b><span>If the same thing needs a second fix, I stop asking AI for another patch. It finds the root cause and shows me the evidence.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Tested a fix only on its own bug</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Test the neighbours</b><span>A rule that removes things also gets cases that look similar but must stay.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Fixed one path, missed the others</div><div class="fm-arrow">→</div><div class="fm-fix"><b>List every path first</b><span>Every place the data can get in, not just the one that broke.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Tests didn't follow real use</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Test the way it really runs</b><span>The real model, the production path, data as big as real data. End-to-end in a real browser, with screenshots.</span></div></div>
+<div class="fm-row"><div class="fm-cause">Failures were silent</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Make every failure loud</b><span>Marked as an error, with the reason. All errors at once.</span></div></div>
+</div>
+<p>And one rule over all of them: every old bug becomes a test, and every change runs the whole set.</p>
+<p>These fixes became part of how I work with AI now. The full loop is in <a href="how-i-work-with-ai.html">How I build with AI: a 9-step loop</a>.</p>
+
+<h2><span class="sec">05</span>Where I could be wrong</h2>
+<ol class="rules">
+<li><b>"Prompt" or "thinking" is my call</b>Some fixes changed what the model is given, not how the prompt is worded. Count those as prompt problems, and prompts become about 1 in 3 repeats. Still not the biggest group.</li>
+<li><b>Sorted by one person</b>I sorted the bugs myself, from my own notes. Someone else might group them differently.</li>
+</ol>
+
+<h2><span class="sec">06</span>FAQ</h2>
+<h3>Why do systems built with AI keep getting the same bugs?</h3>
+<p>In my case, most repeat bugs were not badly worded prompts. Only about 1 in 7 was. The rest came from patching symptoms instead of causes, testing a fix only on its own bug, missing a second path for the same data, tests that don't follow real use, and failures that stay silent.</p>
+<h3>Why don't unit tests and evals catch AI-written bugs?</h3>
+<p>Because they test something easier than real use: only the case that was fixed, a fake model instead of the real API, parts connected by hand only in the test, or a few small examples when real data is bigger. The bug lives in the gap between what the test checks and what production does.</p>
+
+<h2><span class="sec">07</span>Sources</h2>
+<ul class="small">
+<li>A bug "fixed" three times: <a href="https://tianpan.co/blog/2026/05/02/agentic-debugger-trap-symptom-vs-root-cause">The Agentic Debugger's Trap</a>, Tian Pan (2 May 2026)</li>
+<li>The same loop across many coding tools: <a href="https://www.freecodecamp.org/news/how-to-break-the-ai-coding-agent-fix-loop/">How to Break the AI Coding Agent Fix Loop</a>, freeCodeCamp (5 October 2026)</li>
+<li>103 bugs, 70 repeats: my own bug notes, September to October 2026 (private)</li>
+</ul>
+
+<footer>© 2026 Yu Han Tey · <a href="../">Home</a></footer>
+</main>
+</body>
+</html>

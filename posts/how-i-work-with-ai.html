@@ -48,14 +48,6 @@
     },
     {
       "@type": "Question",
-      "name": "Why do systems built with AI keep getting the same bugs?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "In my case, most repeat bugs were not badly worded prompts. Only about 1 in 7 was. The rest came from patching symptoms instead of causes, testing a fix only on its own bug, missing a second path for the same data, tests that don't follow real use, and failures that stay silent."
-      }
-    },
-    {
-      "@type": "Question",
       "name": "How do you know when to stop researching and start building?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -83,6 +75,7 @@
 </div>
 
 <h3>Before and after the loop</h3>
+<p>The loop trades a little speed at the start for fewer repeat bugs, and for decisions I can explain.</p>
 <table class="ba">
 <tr><th></th><th>Before: vibe coding</th><th>After: the loop</th></tr>
 <tr><td>Who decides</td><td>AI wrote it, I trusted it</td><td>AI drafts, I decide, with a number</td></tr>
@@ -136,6 +129,16 @@
 
 <h2><span class="sec">03</span>My loop</h2>
 
+<p>It's a loop, not a line. Step 9 feeds the next round of step 1.</p>
+<pre><code>┌─► 1 Seven questions ─► 2 Expected behaviour ─► 3 Research ─┐
+│                                                           ▼
+│   6 Eval ◄───────── 5 Hypothesis ◄───────── 4 Decide ◄─────┘
+│     │
+│     ▼
+│   7 Build and test ─► 8 Ship ─► 9 Keep checking, exploring ─┐
+│                                                             │
+└────────────── new questions, new bugs, new ideas ◄──────────┘</code></pre>
+
 <ol class="loop">
 <li class="me"><span class="dot">1</span><div class="title">Seven questions <span class="who">AI asks · I answer</span></div>
 <div class="desc">Most people ask AI questions. Here I make AI ask <b>me</b>. On every new project, my assistant won't start until I answer seven questions, and it pushes back on vague answers:</div>
@@ -170,7 +173,19 @@
 <li class="me"><span class="dot">4</span><div class="title">Decide <span class="who">Me</span></div>
 <div class="desc">AI lists the decisions that need a human. <b>I make them</b>, and write down what the system must never do.</div></li>
 <li class="me"><span class="dot">5</span><div class="title">Hypothesis <span class="who">Me</span></div>
-<div class="desc">Not one guess, but <b>several competing ones</b>: which option should win, and why. All written down <b>before</b> any test runs, so the test can prove me wrong.</div></li>
+<div class="desc">Before testing anything, I write down <b>several competing guesses</b> about what will work, and what result would prove each one wrong.</div>
+<div class="desc">Say similar memories need merging into one. Three guesses:</div>
+<table class="mini cases">
+<tr><th>Guess</th><th>I'd be wrong if…</th></tr>
+<tr><td>A. One model is enough</td><td>it merges things that should stay apart</td></tr>
+<tr><td>B. A second model checking the first fixes that</td><td>wrong merges don't drop, or right merges get blocked</td></tr>
+<tr><td>C. A stronger model alone fixes it</td><td>it makes the same wrong merges as A</td></tr>
+</table>
+<div class="desc">Step 6 then runs all three on the same test, and the result decides:</div>
+<pre><code>guess A ─┐
+guess B ─┼─► same test cases ─► scores ─► keep the winner, drop the rest
+guess C ─┘</code></pre>
+<div class="desc">Writing the guesses down <b>first</b> matters. Otherwise it's too easy to decide afterwards that whatever won was what I expected.</div></li>
 <li class="ai"><span class="dot">6</span><div class="title">Eval <span class="who">AI drafts · I judge</span></div>
 <div class="desc">I don't write every test case myself. AI writes them from my examples in step 2, with the answer it expects, and <b>marks the ones it isn't sure about</b>. I answer those first, then check the rest.</div>
 <div class="desc">Last time, AI wrote 54 cases and flagged 13. I answered the 13 and checked the other 41. Answers a person has checked are called <b>gold</b>; answers only AI has written are <b>silver</b>.</div>
@@ -241,64 +256,27 @@ Why: both mention "fish", so the rule read it as a replacement.</code></pre>
 <p class="lesson">That is the line between using AI and handing over the decision.</p>
 </div>
 
-<h2><span class="sec">06</span>Why the same bugs kept coming back when I vibe coded</h2>
+<p>Why did the same bugs keep coming back, and why didn't tests catch them? That got its own post: <a href="why-same-bugs-come-back.html">Why AI-built systems keep getting the same bugs</a>.</p>
 
-<p>Back then I was vibe coding: AI wrote the code, and I trusted it fully without checking much myself. The weekly notes showed what that cost. In five weeks I fixed 103 bugs. 70 of them were repeats: the same root cause, back in a new form. Every repeat meant another pull request.</p>
-
-<p>Other developers describe the same loop, and it shows up across many popular coding tools. In one team, a bug had been "fixed" three times, each time with green tests, while the real cause stayed untouched. The agent was right that the symptom would go away. It was wrong about why.</p>
-
-<p>So I went back and sorted every bug by its root cause. The repeats came from five habits:</p>
-
+<h2><span class="sec">06</span>Limits of the loop</h2>
 <ol class="rules">
-<li><b>I patched the symptom, not the cause</b>One problem took 11 pull requests before I found the real cause: a single setting.</li>
-<li><b>A fix was tested only on its own bug</b>So it broke something next to it, and that became the next bug.</li>
-<li><b>I fixed one path and missed the others</b>The same data could come in through a second door I hadn't checked.</li>
-<li><b>Tests didn't take the path real use takes</b>So a fix passed its test while the bug was still there.</li>
-<li class="wide"><b>Failures were silent</b>Problems showed up late and one at a time, so each one became its own fix.</li>
-</ol>
-
-<p class="insight">Only about 1 in 7 repeats was a badly worded prompt.</p>
-
-<p>Most came from not thinking a case through. So I changed where I spend my time: less on rewording prompts, more on listing what could go wrong before AI writes any code.</p>
-
-<h2><span class="sec">07</span>How I stop the repeats</h2>
-
-<div class="fixmap">
-<div class="fm-row"><div class="fm-cause">I patched the symptom</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Find the cause first</b><span>If the same thing needs a second fix, I stop asking AI for another patch. It finds the root cause and shows me the evidence.</span></div></div>
-<div class="fm-row"><div class="fm-cause">Tested a fix only on its own bug</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Test the neighbours</b><span>A rule that removes things also gets cases that look similar but must stay.</span></div></div>
-<div class="fm-row"><div class="fm-cause">Fixed one path, missed the others</div><div class="fm-arrow">→</div><div class="fm-fix"><b>List every path first</b><span>Every place the data can get in, not just the one that broke.</span></div></div>
-<div class="fm-row"><div class="fm-cause">Tests didn't follow real use</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Test the way it really runs</b><span>Same path as real use. End-to-end in a real browser, with screenshots.</span></div></div>
-<div class="fm-row"><div class="fm-cause">Failures were silent</div><div class="fm-arrow">→</div><div class="fm-fix"><b>Make every failure loud</b><span>Marked as an error, with the reason. All errors at once.</span></div></div>
-</div>
-<p>And one rule over all of them: every old bug becomes a test, and every change runs the whole set.</p>
-
-<h2><span class="sec">08</span>What's next</h2>
-<p>The "explore" job in step 9 is next. First, a one-time map of where our design is behind recent research. Then the weekly job: up to three new ideas, each tried against our evals.</p>
-<p>The goal is the same as everything above. AI does more of the work, and I still understand every decision.</p>
-
-<h2><span class="sec">09</span>Where I could be wrong</h2>
-<ol class="rules">
-<li><b>"Prompt" or "thinking" is my call</b>Some fixes changed what the model is given, not how the prompt is worded. Count those as prompt problems, and prompts become about 1 in 3 repeats. Still not the biggest group.</li>
 <li><b>The loop is heavy</b>Nine steps make sense for something real users depend on. For a quick script or a throwaway prototype, plain vibe coding is probably fine.</li>
+<li><b>It still depends on my judgement</b>AI drafts and I decide. If my decision is wrong, only the held-out tests and the number I watch after launch will tell me.</li>
 </ol>
 
-<h2><span class="sec">10</span>FAQ</h2>
+<h2><span class="sec">07</span>FAQ</h2>
 <h3>How do you stop AI from writing in jargon?</h3>
 <p>Give it fixed writing rules: give an example before the name of a thing, spell out every abbreviation, one idea per sentence, and sources at the end. Ask for a diagram whenever there is a structure or a sequence, even a quick ASCII diagram.</p>
 <h3>What should an AI engineer let AI do, and what should they keep?</h3>
 <p>Let AI do the reading, the first drafts of code, and the repetitive testing. Keep the decisions and the product taste: which trade-off to accept, what the system must never do, what will feel right to the user, and whether a result is good enough to ship.</p>
 
-<h3>Why do systems built with AI keep getting the same bugs?</h3>
-<p>In my case, most repeat bugs were not badly worded prompts. Only about 1 in 7 was. The rest came from patching symptoms instead of causes, testing a fix only on its own bug, missing a second path for the same data, tests that don't follow real use, and failures that stay silent.</p>
 <h3>How do you know when to stop researching and start building?</h3>
 <p>Stop when the next paper can't change your choice. If you're still unsure between two designs, stop reading and test: write a hypothesis, build both versions with AI, and let an ablation decide.</p>
 
-<h2><span class="sec">11</span>Sources</h2>
+<h2><span class="sec">08</span>Sources</h2>
 <ul class="small">
 <li>A fixed bug harder to understand than the bug: <a href="https://aiidelist.com/blog/make-ai-coding-agents-explain-code-clearly.md">AI Coding Agents Can Fix the Bug — So Why Are Their Explanations So Hard to Understand?</a> (2 October 2026)</li>
 <li>Asking three times for an abbreviation: <a href="https://claudeissues.com/issue/29769-claude-code-over-explains-and-talks-past-direct-questions-instead-of-answering-t">a public bug report</a></li>
-<li>A bug "fixed" three times: <a href="https://tianpan.co/blog/2026/05/02/agentic-debugger-trap-symptom-vs-root-cause">The Agentic Debugger's Trap</a>, Tian Pan (2 May 2026)</li>
-<li>The same loop across many coding tools: <a href="https://www.freecodecamp.org/news/how-to-break-the-ai-coding-agent-fix-loop/">How to Break the AI Coding Agent Fix Loop</a>, freeCodeCamp (5 October 2026)</li>
 <li>103 bugs, 70 repeats: my own bug notes, September to October 2026 (private)</li>
 </ul>
 

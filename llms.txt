@@ -10,6 +10,7 @@
 
 ## Writing
 - [How I build with AI: a 9-step loop, from first question to weekly review](https://yuhantey.github.io/posts/how-i-work-with-ai.html): how an AI engineer researches, decides, tests and ships with AI, and why repeat bugs were mostly not prompt problems.
+- [Why AI-built systems keep getting the same bugs, and why tests didn't catch them](https://yuhantey.github.io/posts/why-same-bugs-come-back.html): 103 bugs in five weeks of vibe coding, 70 repeats, only about 1 in 7 a prompt problem; why unit tests and evals missed them.
 
 ## Links
 - GitHub: https://github.com/yuhantey
