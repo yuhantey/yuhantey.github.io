@@ -13,7 +13,7 @@
 - [Why AI-built systems keep getting the same bugs, and why tests didn't catch them](https://yuhantey.github.io/posts/why-same-bugs-come-back.html): 103 bugs in five weeks of vibe coding, 70 repeats, only about 1 in 7 a prompt problem; why unit tests and evals missed them.
 
 ## Projects
-- [One More Question (多问一句)](https://yuhantey.github.io/games/one-more-question/): a free pixel browser game in Chinese and English. Players hear a confident claim, open a few clue cards, and judge it; each case is built on a real study of a thinking trap (regression to the mean, base rates, survivorship bias, sunk cost and more).
+- [Will You Be Fooled? (你会被骗吗？)](https://yuhantey.github.io/games/one-more-question/): a free pixel browser game in Chinese and English. Players hear a confident claim, open a few clue cards, and judge it; each case is built on a real study of a thinking trap (regression to the mean, base rates, survivorship bias, sunk cost and more).
 
 ## Links
 - GitHub: https://github.com/yuhantey

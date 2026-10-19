@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="一个关于「先查一查再相信」的像素小游戏。A little pixel game about checking before you believe.">
-<meta property="og:title" content="多问一句 · One More Question">
-<meta property="og:description" content="一个关于「先查一查再相信」的像素小游戏。A little pixel game about checking before you believe.">
+<meta name="description" content="一个像素小游戏：有人很肯定地说一件事，你去查线索，看自己会不会被骗。A pixel game: someone is sure about something, you check the clues and see if you get fooled.">
+<meta property="og:title" content="你会被骗吗？ · Will You Be Fooled?">
+<meta property="og:description" content="一个像素小游戏：有人很肯定地说一件事，你去查线索，看自己会不会被骗。A pixel game: someone is sure about something, you check the clues and see if you get fooled.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yuhantey.github.io/games/one-more-question/">
 <style>html,body{margin:0;padding:0}</style>
 </head>
 <body>
-<title>多问一句</title>
+<title>你会被骗吗？</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Pixelify+Sans:wght@500&family=ZCOOL+QingKe+HuangYou&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
@@ -622,7 +622,7 @@ const EN = {
 
 // UI strings: [Chinese, English]
 const UI = {
-  title: ["多问一句", "One More Question"],
+  title: ["你会被骗吗？", "Will You Be Fooled?"],
   tagline: ["一个关于「先查一查再相信」的小游戏", "A little game about checking before you believe"],
   introText: ["每个地方都有人很肯定自己是对的。有时候那个人就是你。<br>先查一查，再下判断。当然，你也可以不查，反正丢脸的不是我。", "In every place, someone is sure they're right. Sometimes it's you.<br>Check first, then judge. Or don't check — it's not my reputation on the line."],
   seeMap: ["看地图", "See the map"],
@@ -669,6 +669,7 @@ const UI = {
   herringGot: ["这条线索骗到你了：<b>「{l}」</b><br>{n}<br>听起来很像证据，对吧？其实它跟问题一点关系都没有。", "This clue fooled you: <b>\"{l}\"</b><br>{n}<br>Sounds like evidence, right? It has nothing to do with the question."],
   herringMissed: ["<b>「{l}」</b>是误导线索。你查了，但没被它骗到。", "<b>\"{l}\"</b> was a decoy. You checked it and weren't fooled."],
   startBest: ["开始", "Start"],
+  realNote: ["每一题都来自生活里很容易被骗的情况，也都参考了真实研究。", "Every case comes from an everyday situation where people often get fooled, and each one draws on real research."],
   answered: ["已答", "Answered"], leftToDo: ["还剩", "Left"],
   leftTitle: ["还没答的题", "Still to answer"], leftN: ["还剩 {n} 题", "{n} left"], allDone: ["全部答完了！", "All answered!"],
   days: ["剩下的天数", "Days left"],
@@ -733,7 +734,7 @@ const UI = {
     { pic: "🗣️", h: ["有人很肯定地说了一件事", "Someone is very sure about something"], b: ["比如：「上这个补习班，成绩能高 15 分。」<br>你的任务：判断他说得对不对。", "Like: \"This cram school adds 15 points.\"<br>Your job: work out whether they're right."] },
     { pic: "🃏", h: ["点线索卡去查", "Tap clue cards to investigate"], b: ["每张卡要花 1 天，你只有 <b>3 天</b>，5 张卡查不完。<br>先想清楚：哪几张最有用？", "Each card costs 1 day and you only have <b>3 days</b> — you can't open all 5.<br>Think first: which ones matter most?"] },
     { pic: "🔍", h: ["单看一张，常常看不出来", "One card alone rarely tells you"], b: ["有的卡会让你太相信他，有的会让你太怀疑他，还有一张是故意骗你的。<br>要把两张卡<b>放在一起比</b>，才看得出真相。", "Some cards make you trust them too much, some make you doubt too much, and one is a deliberate decoy.<br>The truth shows when you <b>put two cards side by side</b>."] },
-    { pic: "⚖️", h: ["查够了，就下判断", "When you've seen enough, decide"], b: ["按「我要下判断」，选一个答案。<br>小心：<b>他有时候是对的</b>。一味怀疑也会答错。", "Tap \"I'm ready to judge\" and pick an answer.<br>Careful: <b>sometimes they're right</b>. Doubting everything loses too."] },
+    { pic: "⚖️", h: ["查够了，就下判断", "When you've seen enough, decide"], b: ["按「我要下判断」，选一个答案。<br>小心：<b>他有时候是对的</b>。每次都觉得他错，也会答错。", "Tap \"I'm ready to judge\" and pick an answer.<br>Careful: <b>sometimes they're right</b>. If you always think they're wrong, you'll get it wrong too."] },
     { pic: "💡", h: ["答完，看看自己漏了什么", "Afterwards, see what you missed"], b: ["结果会告诉你：哪张卡骗了你、你没查的卡写了什么、背后是哪个真实研究。<br>分数会一直存着。", "The result shows which card fooled you, what the unopened cards said, and the real study behind it.<br>Your points are saved."] },
   ],
   youJudge: ["❓ 你要判断", "❓ Your question"],
@@ -3157,8 +3158,8 @@ EN.cases.covid94.claim = ["Official England data: in April–May 2022, 94% of CO
 
 // ================= QA round 2 + original study numbers =================
 // tutor: the old claim ("300 a lesson, sign up anyway!") made the parent sound foolish at a glance
-CASE_BY_ID.tutor.claim = ["家长群里说：上「明德补习班」的孩子，成绩平均高 15 分。", "我在想，要不要也给孩子报这个班。"];
-EN.cases.tutor.claim = ["The parents' group chat says kids at Mingde Cram School score 15 points higher on average.", "I'm wondering whether to sign my kid up for it too."];
+CASE_BY_ID.tutor.claim = ["家长群里说：上这家补习班的孩子，成绩平均高 15 分。", "我在想，要不要也给孩子报这家。"];
+EN.cases.tutor.claim = ["The parents' group chat says kids at this cram school score 15 points higher on average.", "I'm wondering whether to sign my kid up for it too."];
 
 // surgery: use the original 1982 wording ("90 will survive" vs "10 will die") and the original result (75% vs 58% chose surgery)
 CASE_BY_ID.surgery.claim = ["爸爸的手术，两位医生都给了意见。", "张医生说：「100 个人做这个手术，90 个能平安度过手术。」李医生说：「100 个人做这个手术，10 个会在手术中死去。」我觉得张医生说的手术更安全，你说呢？"];
@@ -3418,7 +3419,7 @@ DAILY_IDS.mirror = DAILY_IDS.mirror.filter(id => id !== "master"); DAILY_IDS.mir
 
 // ================= clearer questions: each one says who, what happened, and what you're judging =================
 const Q = {
-  tutor: ["上「明德补习班」，真的能让成绩高 15 分吗？", "Does Mingde Cram School really raise scores by 15 points?"],
+  tutor: ["上这家补习班，真的能让成绩高 15 分吗？", "Does this cram school really raise scores by 15 points?"],
   schools: ["排名靠前的大多是小学校，是因为小学校教得比较好吗？", "Small schools top the rankings — is that because they teach better?"],
   nap: ["上课的人压力降了 30%，这 30% 是冥想课的功劳吗？", "Attendees' stress fell 30% — is that 30% thanks to the meditation class?"],
   aicheck: ["工具标出了你的作文。你真的用了 AI 的可能性，大概是多少？", "The tool flagged your essay. How likely is it that you really used AI?"],
@@ -3462,6 +3463,783 @@ for (const [id, [zh, en]] of Object.entries(Q)) {
 // ---------- inside each town, easy → hard: one-version cases first, then two-version, then three-version ----------
 { const level = id => TWIST[id]?.versions ? 3 : TWIST[id]?.alt ? 2 : 1;
   for (const ch of Object.keys(DAILY_IDS)) DAILY_IDS[ch] = DAILY_IDS[ch].map((id, i) => [id, i]).sort((a, b) => level(a[0]) - level(b[0]) || a[1] - b[1]).map(x => x[0]); }
+
+// ================= plain speech pairs (shuorenhua pass) =================
+// Exact [old, new] substring swaps, applied after the dash pass.
+const REWRITE = [
+[
+"真正算补习班功劳的，大约只有 2 分：有一点用",
+"能算补习班功劳的，大约只有 2 分。有一点用"
+],
+[
+"这次不一样：小学校没有挤在排名最后面",
+"这次小学校没有挤在排名最后面"
+],
+[
+"真正算课的功劳的，只有大约 3%。",
+"能算课的功劳的，只有大约 3%。"
+],
+[
+"想知道一个东西有没有用：同一时间留一组不用的人来比较（这叫「对照组」）；用抽签这种跟人无关的方法决定谁用（这叫「随机分组」）。",
+"想知道一个东西有没有用，就在同一时间留一组不用的人来比（这组人叫「对照组」），再用抽签这种跟人无关的办法决定谁用（这种分法叫「随机分组」）。"
+],
+[
+"Kahneman 发现这其实是回归均值。",
+"Kahneman 发现这是回归均值。"
+],
+[
+"却有 4 个被冤枉，被标出来的你",
+"却有 4 个被冤枉。被标出来的你"
+],
+[
+"结果越容易很极端。",
+"结果越容易走极端。"
+],
+[
+"一模一样的一句话。",
+"说的是同一件事。"
+],
+[
+"这就是为什么彩票、抽奖、盲盒这种「小机会、大奖品」的东西特别吸引人。注意：这是用金钱赌局做的实验",
+"所以彩票、抽奖、盲盒这种「小机会、大奖品」的东西特别吸引人。不过，这是用金钱赌局做的实验"
+],
+[
+"也就是说，人常常不愿意花小钱先查清楚。注意：实验是猜网址价格",
+"人常常不愿意花小钱先查清楚。不过，实验是猜网址价格"
+],
+[
+"这次不一样：没看到挂牌价的经纪估 1,430 万",
+"这次没看到挂牌价的经纪估 1,430 万"
+],
+[
+"图表可以用同样的数字讲出很吓人或很诱人的故事。",
+"同样的数字，图换个画法，就能看起来很吓人，也能看起来很诱人。"
+],
+[
+"「先训练猴子」来自X 实验室",
+"「先训练猴子」来自 X 实验室"
+],
+[
+"真正要比的是以后：",
+"要比的是以后："
+],
+[
+"不是因为戏比较好，而是因为钱已经花了",
+"原因不是戏比较好，是钱已经花了"
+],
+[
+"其实对方比你想的更喜欢你。",
+"可对方比你想的更喜欢你。"
+],
+[
+"这次是真的：聊天时他一直在看手机，之后也没再发消息；他跟每个人都能聊很久，所以聊一个小时也不特别。好几条放在一起，都指向他没那么有兴趣。",
+"聊天时他一直在看手机，之后也没再发消息。他跟每个人都能聊很久，所以聊一个小时也不特别。好几条线索都说明，这次他是真的没那么有兴趣。"
+],
+[
+"真正卡住你的是面试，不是学历。",
+"卡住你的是面试，不是学历。"
+],
+[
+"再决定花大钱、大时间。",
+"再决定要不要花大钱、花很多时间。"
+],
+[
+"相机真正的功劳大约是 3 起",
+"相机的功劳大约是 3 起"
+],
+[
+"问卷匿名，也救不了「不满意的人根本没来填」。",
+"问卷匿名也没用，不满意的人根本没来填。"
+],
+[
+"听起来很像证据，对吧？其实它跟问题一点关系都没有。",
+"听起来很像证据，可它跟问题一点关系都没有。"
+],
+[
+"才看得出真相。",
+"才看得出来。"
+],
+[
+"判断变了，就是偏见在起作用。",
+"判断变了，就是偏见在作怪。"
+],
+[
+"rose 3 points that term, the exams were easier.",
+"rose 3 points that term. The exams were easier."
+],
+[
+"Cram school's real share is about 2 points: a little, nowhere near 15, and not zero either.",
+"So cram school itself added about 2 points. That's a little, nowhere near 15, but not zero either."
+],
+[
+"also rose 3 points, cram school's real share is just 2.",
+"also rose 3 points. Cram school only added 2."
+],
+[
+"Kids without it didn't move; kids with it rose 15. This time it's real.",
+"Kids without it didn't move. Kids with it rose 15. This time cram school really did it."
+],
+[
+"This time is different: small schools aren't crowding the bottom, and a lottery study found students sent to small schools really did graduate more. Here \"small schools are better\" has evidence.",
+"This time small schools aren't crowding the bottom, and a lottery study found students sent to small schools really did graduate more. So \"small schools are better\" has evidence here."
+],
+[
+"Almost no small schools at the bottom, this time they really are better.",
+"Almost no small schools at the bottom. This time they really are better."
+],
+[
+"also saw stress fall 25%, these three months were the quiet season.",
+"also saw stress fall 25%. These three months were the quiet season."
+],
+[
+"This time, with a lottery split, attendees fell 30% and non-attendees barely moved. That 30% is essentially the class.",
+"This time people were split by lottery. Attendees' stress fell 30% and non-attendees' barely moved. So the 30% really is the class."
+],
+[
+"also got 25% less stressed, it was the quiet season!",
+"also got 25% less stressed. It was the quiet season!"
+],
+[
+"Non-attendees didn't change at all, the 30% is the class.",
+"Non-attendees didn't change at all. The 30% is the class."
+],
+[
+"The scolded kids rose 10 points, sounds effective, but the next village's unscolded bottom 5 rose 9. An unusually bad score usually includes bad luck and bounces back anyway; an unusually good one",
+"The scolded kids rose 10 points. Sounds like it worked, but the next village's bottom 5, never scolded, rose 9. An unusually bad score usually has some bad luck in it and bounces back anyway. An unusually good one"
+],
+[
+"Of 100 essays about 1 used AI and gets caught; of 99 human ones, 1 in 25 is misflagged, about 4. Of roughly 5 flagged, only 1 used AI: about 20%.",
+"Of 100 essays, about 1 used AI and gets caught. Of the 99 human ones, 1 in 25 is wrongly flagged, so about 4. Of roughly 5 flagged, only 1 used AI. That's about 20%."
+],
+[
+"Of 100, about 50 used it and nearly all are caught; of the 50 human ones, 1 in 25 means only 2 misflagged. Of about 52 flagged, 50 really used AI: about 95%.",
+"Of 100, about 50 used it and nearly all are caught. Of the 50 human ones, 1 in 25 means only 2 are wrongly flagged. Of about 52 flagged, 50 really used AI. That's about 95%."
+],
+[
+"but 4 were wrongly flagged, you're most likely one of the wrongly flagged.",
+"but 4 were wrongly flagged. You're most likely one of those 4."
+],
+[
+"Half the class used AI, almost every flag is right.",
+"Half the class used AI. Almost every flag is right."
+],
+[
+"Enough reviews, over enough time, with people you know agreeing, the 5.0 is believable.",
+"So the 5.0 is believable."
+],
+[
+"Enough, spread out, then trust the score.",
+"If there are enough and they're spread out, trust the score."
+],
+[
+"900 reviews over three months, and friends agree, the 5.0 is real.",
+"900 reviews over three months, and friends agree. The 5.0 is real."
+],
+[
+"Dr. A's sounds safer to me, what do you think?",
+"Dr. A's sounds safer to me. What do you think?"
+],
+[
+"\"90 survive\" IS \"10 die\", the exact same sentence.",
+"\"90 survive\" IS \"10 die\". Same fact, different words."
+],
+[
+"Put the odds and resale prices together: of 72 boxes, 1 secret worth $150 and 71 regulars worth about $5 each. Average value per box: about $7, for $12. Friends and unboxing videos only come from the winners.",
+"Put the odds and resale prices together. Of 72 boxes, 1 is a secret worth $150 and 71 are regulars worth about $5 each. So a box is worth about $7 on average, and you pay $12. You only hear from friends and unboxing videos that won."
+],
+[
+"then add them up, that's the average you get, the \"expected value\".",
+"then add them up. That's the average you get, called the \"expected value\"."
+],
+[
+"This time it's a special case: 1 secret per 6 boxes. Average value per box: about 150÷6 + 5×5÷6 ≈ $29, for $12.",
+"This is a special case with 1 secret per 6 boxes. A box is worth about 150÷6 + 5×5÷6 ≈ $29 on average, and you pay $12."
+],
+[
+"1 secret in every 6 boxes, each box is worth about $29!",
+"1 secret in every 6 boxes. Each box is worth about $29!"
+],
+[
+"You like this flat, right? Sign today",
+"You like this flat? Sign today"
+],
+[
+"Freshly renovated, newly painted walls, it looks great.",
+"Freshly renovated with newly painted walls. It looks great."
+],
+[
+"Combine the chance with the cost: 1 in 5 leaks, 50,000 to fix, an expected loss of 10,000.",
+"Combine the chance with the cost. 1 in 5 flats leaks and a fix costs 50,000, so the expected loss is 10,000."
+],
+[
+"choosing wrong without it, that's the \"value of information\".",
+"choosing wrong without it. That's the \"value of information\"."
+],
+[
+"from two years ago, well kept, it looks great.",
+"from two years ago, well kept. It looks great."
+],
+[
+"The chance is tiny, the expected loss a few hundred, paying 2,000 to inspect isn't worth it.",
+"The chance is tiny and the expected loss is a few hundred, so paying 2,000 to inspect isn't worth it."
+],
+[
+"an average loss of 10,000, a 2,000 inspection is a bargain.",
+"an average loss of 10,000. A 2,000 inspection is a bargain."
+],
+[
+"not a single leak, 2,000 for an inspection isn't worth it.",
+"not a single leak. 2,000 for an inspection isn't worth it."
+],
+[
+"drive the three days instead, it feels safer than flying.",
+"drive the three days instead. It feels safer than flying."
+],
+[
+"Side by side: about 7 deaths per billion passenger-miles driving versus 0.07 flying, driving the same distance is about 100 times riskier. Plane crashes are worse when they happen, but far, far rarer.",
+"Side by side, it's about 7 deaths per billion passenger-miles driving versus 0.07 flying. Driving the same distance is about 100 times riskier. Plane crashes are worse when they happen, but much rarer."
+],
+[
+"commercial aviation 0.07, driving is about 100 times",
+"commercial aviation 0.07. Driving is about 100 times"
+],
+[
+"One flat, three agents, three values: shown 15 million",
+"Three agents valued the same flat. Shown 15 million"
+],
+[
+"His good track record is because past listing prices",
+"His track record looks good because past listing prices"
+],
+[
+"This time is different: the agent who saw no listing price",
+"This time the agent who saw no listing price"
+],
+[
+"everyone landed around 14M, nothing pulled it.",
+"everyone landed around 14M. Nothing pulled it."
+],
+[
+"However clear the plan, compare it with his past speed. 2,000 words took him 3 days; 6,000 at that pace is about 9 days, three won't do. But \"he'll never finish\" is too gloomy: given more days, he will.",
+"Even a clear plan needs checking against his past speed. 2,000 words took him 3 days, so 6,000 at that pace is about 9 days. Three won't do. But \"he'll never finish\" is too gloomy. Given more days, he will."
+],
+[
+"His last 6,000-word report took two and a half days, the same length.",
+"His last report was the same length, 6,000 words, and took two and a half days."
+],
+[
+"This is 6,000, that's 9 days.",
+"This is 6,000. That's 9 days."
+],
+[
+"It's real: it comes from",
+"It's real. It comes from"
+],
+[
+"put it next to the starting risk: from about 56 to about 66 in 1,000, 10 more, or 1 more person per 100.",
+"put it next to the starting risk. It goes from about 56 to about 66 in 1,000. That's 10 more, or 1 more person per 100."
+],
+[
+"18% sounds huge, it's 56 people",
+"18% sounds huge, but it's 56 people"
+],
+[
+"The line rockets upward, it looks like a huge gain.",
+"The line shoots up. It looks like a huge gain."
+],
+[
+"similar funds averaged 6%, it lagged. But \"funds are all scams\" is wrong too: the problem",
+"similar funds averaged 6%, so it lagged behind. But \"funds are all scams\" is wrong too. The problem"
+],
+[
+"The chart isn't tricking you, it really did well.",
+"The chart isn't tricking you. It really did well."
+],
+[
+"An honest chart that beats its peers is the real thing.",
+"If the chart is honest and the fund beats its peers, it really did well."
+],
+[
+"Drawn from zero it's still +67%, peers just 8%, it really is good.",
+"Drawn from zero it's still +67%, and peers got just 8%. It really is good."
+],
+[
+"It flared up last summer too, untreated, it cleared",
+"It flared up last summer too. Untreated, it cleared"
+],
+[
+"so you can't credit the food; staying fine on the old food points away from it.",
+"so you can't credit the food. The skin also stayed fine back on the old food, which points away from it."
+],
+[
+"with no luck, that's why I suggested",
+"with no luck. That's why I suggested"
+],
+[
+"This time nothing else changed: a year of ointments did nothing; back on the old food it flared, on the new food it cleared again. Change one thing and the result follows each time, it's the food.",
+"This time nothing else changed. A year of ointments did nothing. Back on the old food it flared, and on the new food it cleared again. Change one thing and the result follows each time. It's the food."
+],
+[
+"Change just one thing, back and forth; if the result",
+"Change just one thing, back and forth. If the result"
+],
+[
+"I'm exhausted after a work week, wanting to unwind",
+"I'm exhausted after a work week. Wanting to unwind"
+],
+[
+"Your partner isn't being unreasonable, what they care about is specific: time together.",
+"Your partner isn't being unreasonable. They want something specific, time together."
+],
+[
+"He says \"I knew they'd split\", did he really know all along?",
+"He says \"I knew they'd split\". Did he really know all along?"
+],
+[
+"Nor was it a lucky guess: he never predicted a breakup, he said both things.",
+"It wasn't a lucky guess either. He never predicted a breakup. He said both things."
+],
+[
+"Feeling you knew it all along, but only after it happened, is \"hindsight bias\".",
+"Feeling, after something happens, that you knew it all along is called \"hindsight bias\"."
+],
+[
+"He just posted \"Told you so.\", 50 likes.",
+"He just posted \"Told you so.\" It has 50 likes."
+],
+[
+"Saying it at the time, consistently, that's when \"I knew it\" counts.",
+"If he said it at the time and kept saying it, \"I knew it\" counts."
+],
+[
+"Put the two numbers together: on the 40 days forecast at 30%, it rained on 13, about three in ten, just as stated. Today was one of the three. Your friend getting wet and the app's rating are one-offs and impressions.",
+"Put the two numbers together. On the 40 days forecast at 30%, it rained on 13. That's about three in ten, just as the forecast said. Today was one of those three. Your friend getting wet is a one-off, and the app's rating is just an impression."
+],
+[
+"of the 40 days forecast at 30%, seven in ten. It keeps forecasting too low; calling it",
+"of the 40 days forecast at 30%. That's seven in ten. It keeps forecasting too low, so calling it"
+],
+[
+"in a reliable manner\", on 30% days",
+"in a reliable manner\". On 30% days"
+],
+[
+"it rained 13, spot on.",
+"it rained 13. Spot on."
+],
+[
+"seven times in ten, it really is off.",
+"seven times in ten. It really is off."
+],
+[
+"All tests passed, is the lander ready to launch?",
+"All tests passed. Is the lander ready to launch?"
+],
+[
+"All 50 successes were room-temperature, part-by-part lab tests, never the whole lander under real conditions, and the fault-finders",
+"All 50 successes were room-temperature lab tests, one part at a time. The whole lander was never tested under real conditions, and the fault-finders"
+],
+[
+"But cancelling is overkill: just test it like the real flight first.",
+"But cancelling goes too far. Just test it like the real flight first."
+],
+[
+"A good test isn't for proving \"I'm right\", it's for finding \"where I'm wrong\".",
+"A good test looks for \"where I'm wrong\", not proof that \"I'm right\"."
+],
+[
+"You tried to prove it would fail and couldn't, launch.",
+"You tried to make it fail and couldn't. Launch."
+],
+[
+"Real-condition tests plus fault-finders finding nothing, then go.",
+"If real-condition tests pass and the fault-finders find nothing, go."
+],
+[
+"All 50 tests were room-temperature, part by part, Mars isn't.",
+"All 50 tests were at room temperature, part by part. Mars isn't like that."
+],
+[
+"It's what we're best at, progress every week!",
+"It's what we're best at. Progress every week!"
+],
+[
+"Together: there's already enough fuel to fly back, but landing failed all three times. The least certain part",
+"There's already enough fuel to fly back, but landing failed all three times. So the least certain part"
+],
+[
+"The \"impossible\" crowd is wrong too, it hasn't been seriously tried.",
+"The \"impossible\" crowd is wrong too. It hasn't been seriously tried."
+],
+[
+"This time landing is solid and fuel is the blocker: the engine needs 5% better efficiency to fly back. The least certain step is the engine, so do it first.",
+"This time landing works and fuel is the problem. The engine needs 5% better efficiency to fly back. So the engine is the least certain step. Do it first."
+],
+[
+"There's already enough fuel to come back, landing is the problem. Three crashes.",
+"There's already enough fuel to come back. Landing is the problem: three crashes."
+],
+[
+"Landing is solid, fuel is what's really stuck.",
+"Landing works. Fuel is the real problem."
+],
+[
+"Rethinking from the basic facts reveals far cheaper ways.",
+"Starting again from the basic facts shows much cheaper ways."
+],
+[
+"Break it down: 1 million in materials plus 5 million in labour, factory and testing, about 6 million, sold for 55.",
+"Break it down. 1 million in materials plus 5 million in labour, factory and testing is about 6 million, and it sells for 55."
+],
+[
+"cost 45 million, 46 in total. At 55 there's room to cut some (about 9 million at most), nowhere near materials cost, and reuse",
+"cost 45 million, so 46 in total. At 55 there's some room to cut, about 9 million at most. That's nowhere near materials cost, and reuse"
+],
+[
+"come to 53.5 million, 54.5 in total. At 55 there's almost no room, no reuse, and no rival charges less.",
+"come to 53.5 million, so 54.5 in total. At 55 there's almost no room to cut. Reuse isn't possible, and no rival charges less."
+],
+[
+"If, broken all the way down, no item can shrink, expensive really is expensive.",
+"If you break it all the way down and no item can shrink, then it really is expensive."
+],
+[
+"adds up to 54.5 million, only half a million of room.",
+"adds up to 54.5 million. Only half a million of room."
+],
+[
+"So many people say it, there must be something to it.",
+"So many people say it. There must be something to it."
+],
+[
+"100,000 shares, even your distant cousin",
+"100,000 shares. Even your distant cousin"
+],
+[
+"you'll catch fewer colds\", is it believable?",
+"you'll catch fewer colds.\" Is it believable?"
+],
+[
+"looks supportive alone.",
+"looks like support on its own."
+],
+[
+"Side by side, it makes no difference.",
+"Side by side, the tea makes no difference."
+],
+[
+"Many shares means easy to share, not true.",
+"Lots of shares means it's easy to share, not that it's true."
+],
+[
+"A year off just delays the decision: coming back",
+"A year off just delays the decision. Coming back"
+],
+[
+"Three more years and 300,000 buy your ticket in, worth continuing. The reason is the future, not \"don't waste the past\".",
+"Three more years and 300,000 get you in, so it's worth continuing. Keep going because of the future, not because you don't want to waste the past."
+],
+[
+"Several things, all only toward you, he really does have an issue with you.",
+"That's several things, all aimed only at you. He really does have an issue with you."
+],
+[
+"Only if it's just you might it be personal.",
+"If it's only you, then it might be personal."
+],
+[
+"He barely greets anyone, it's not about you.",
+"He barely greets anyone. It's not about you."
+],
+[
+"This time, logging both sides: you 12, your roommate 1. Not just a feeling, it really is almost all you.",
+"This time you logged both sides: you 12, your roommate 1. It's not just a feeling. It really is almost all you."
+],
+[
+"attribute to them\", our own contributions",
+"attribute to them\". Our own contributions"
+],
+[
+"You 12, your roommate 1, it really is all you.",
+"You 12, your roommate 1. It really is all you."
+],
+[
+"However specific your objections, they don't reveal bias. Put the scores side by side: knowing it's his, 4; names hidden, the same proposal gets 7.",
+"However specific your objections are, they can't show whether you're biased. Compare the scores. Knowing it's his, you gave 4. With names hidden, the same proposal gets 7."
+],
+[
+"Whoever proposed it, your view was the same, you judged the idea itself.",
+"Your view was the same whoever proposed it, so you judged the idea itself."
+],
+[
+"but their own identical excuses fair, the \"bias blind spot\".",
+"but their own identical excuses fair. This is the \"bias blind spot\"."
+],
+[
+"Name hidden, still a 4, you judged the idea itself.",
+"Name hidden, still a 4. You judged the idea itself."
+],
+[
+"This time it's real: he was on his phone, sent nothing afterwards, and chats for ages with everyone, so an hour isn't special. Several clues point the same way, he's not that interested.",
+"This time he was on his phone, sent nothing afterwards, and chats for ages with everyone, so an hour isn't special. Several clues point the same way: he's not that interested."
+],
+[
+"asking you questions; he's usually quiet",
+"asking you questions. He's usually quiet"
+],
+[
+"Put together, he's quite interested, you were just focused",
+"Taken together, he's quite interested. You were just focused"
+],
+[
+"so it may just be polite; your friend couldn't see. Too few clues, calling it either way is premature.",
+"so it may just be polite. Your friend couldn't see. With this few clues, it's too early to call it either way."
+],
+[
+"You only remember your own mistakes, you never saw",
+"You only remember your own mistakes. You never saw"
+],
+[
+"quitting to study costs not just fees but years of salary and experience, the \"opportunity cost\".",
+"quitting to study costs fees, and also years of salary and experience. That's the \"opportunity cost\"."
+],
+[
+"This time the degree really is the gate:",
+"This time the degree really is what's stopping you:"
+],
+[
+"What blocks you is the degree, not interviews, the master's is the right step.",
+"What blocks you is the degree, not interviews. The master's is the right step."
+],
+[
+"Too few clues: just 5 profiles",
+"There are too few clues: just 5 profiles"
+],
+[
+"Quitting to study, or grinding interviews, may both be effort in the wrong place. Ask a few insiders what they value first: the price of a coffee could save you years.",
+"Quitting to study and grinding interviews may both be effort in the wrong place. First ask a few insiders what they value. A coffee could save you years."
+],
+[
+"You haven't applied yet, you didn't know",
+"You haven't applied yet. You didn't know"
+],
+[
+"the posting requires it, this time, study.",
+"the posting requires it. This time, study."
+],
+[
+"Only 9 of 30 have a master's, you're stuck",
+"Only 9 of 30 have a master's. You're stuck"
+],
+[
+"Just 5 profiles and no applications yet, ask first.",
+"Just 5 profiles and no applications yet. Ask first."
+],
+[
+"in April, May 2022, 94%",
+"in April and May 2022, 94%"
+],
+[
+"A fact-checking site says: yes, 94% is real, the official data says so.",
+"A fact-checking site says yes, 94% is real. The official data says so."
+],
+[
+"in England in April, May were vaccinated",
+"in England in April and May were vaccinated"
+],
+[
+"were vaccinated, of course most deaths were too.",
+"were vaccinated, so of course most deaths were too."
+],
+[
+"The camera helps, just less than claimed; saying",
+"The camera helps, just less than claimed. Saying"
+],
+[
+"Pick out the worst cases, and next time they usually drift back toward normal: \"regression to the mean\". To know how much an action did, compare with how much things would have fallen anyway; only the extra counts.",
+"If you pick out the worst cases, next time they usually drift back toward normal. This is called \"regression to the mean\". To know how much an action did, compare with how much things would have fallen anyway. Only the extra counts."
+],
+[
+"Only this one fell to 4, most of that drop",
+"Only this one fell to 4, so most of that drop"
+],
+[
+"Here almost nothing, so the drop",
+"Here it's almost nothing, so the drop"
+],
+[
+"fell from 11 to 6, about 5 would have gone anyway.",
+"fell from 11 to 6, so about 5 would have gone anyway."
+],
+[
+"the others didn't change, it really is the camera.",
+"the others didn't change. It really is the camera."
+],
+[
+"It's been so long, the next try should have better odds, right?",
+"It's been so long, so the next try should have better odds."
+],
+[
+"Is the next try likelier than this machine's usual odds per try?",
+"Is the next try more likely to win than usual on this machine?"
+],
+[
+"pure random; today's wins have no pattern",
+"pure random. Today's wins have no pattern"
+],
+[
+"The counter's at 44, the next try",
+"The counter's at 44, so the next try"
+],
+[
+"so the counter means nothing, the next try",
+"so the counter means nothing. The next try"
+],
+[
+"only 3 plays have passed since, 40-odd to go.",
+"only 3 plays have passed since, so there are 40-odd to go."
+],
+[
+"isn't always an illusion, it depends",
+"isn't always an illusion. It depends"
+],
+[
+"Mode B is pure random, the machine doesn't remember your tries.",
+"Mode B is pure random. The machine doesn't remember your tries."
+],
+[
+"Someone just won, the next guarantee",
+"Someone just won, so the next guarantee"
+],
+[
+"just last year's story; it's who didn't answer plus how few answered that shows the problem.",
+"just last year's story. What shows the problem is who didn't answer and how few answered."
+],
+[
+"on a reward trip, likely very happy. Without the happiest group, 92% is if anything too low.",
+"on a reward trip, who are likely very happy. With the happiest group missing, 92% is, if anything, too low."
+],
+[
+"Later the sales team back from the trip is asked too, the real figure is higher.",
+"Later, when the sales team gets back from the trip and is asked too, the real figure turns out higher."
+],
+[
+"480 people answered, the 92% is real.",
+"480 people answered, so the 92% is real."
+],
+[
+"Lin's process was sound; the bad result was luck.",
+"Lin's process was sound. The bad result was luck."
+],
+[
+"a good one, luck sits in between.",
+"a good one. Luck sits in between."
+],
+[
+"Lin never compared it; the delay",
+"Lin never compared it. The delay"
+],
+[
+"Lin's process was sound; the result was bad luck.",
+"Lin's process was sound. The result was bad luck."
+],
+[
+"three weeks late, of course it arrived late. The fault lies elsewhere, not in Lin's choice.",
+"three weeks late, so of course it arrived late. The fault is somewhere else, not in Lin's choice."
+],
+[
+"The whole region flooded, any choice",
+"The whole region flooded. Any choice"
+],
+[
+"Fridges bought 15 years ago, most have died by now, lasted 12 years on average.",
+"Of the fridges bought 15 years ago, most have died by now. They lasted 12 years on average."
+],
+[
+"thrown out long ago, you only see the survivor. Counting",
+"thrown out long ago. You only see the survivor. Counting"
+],
+[
+"new ones 12, the same.",
+"new ones 12. The same."
+],
+[
+"Or don't check, it's not my reputation",
+"Or don't check. It's not my reputation"
+],
+[
+"This is computed only from your real choices, the numbers are above. It's not a horoscope; it gets",
+"This comes only from your real choices. The numbers are above. It's not a horoscope. It gets"
+],
+[
+"That's not embarrassing. Forcing a pick is.",
+"That's fine to say. Forcing a pick is worse."
+],
+[
+"Sounds like evidence, right? It has nothing",
+"It sounds like evidence, but it has nothing"
+],
+[
+"Give it to these ones, they're the keenest",
+"Give it to these ones. They're the keenest"
+],
+[
+"you only have <b>3 days</b>, you can't open all 5.",
+"you only have <b>3 days</b>, so you can't open all 5."
+],
+[
+"I was right this time, look at those cards again.",
+"I was right this time. Look at those cards again."
+],
+[
+"Don't just look at the best case, multiply",
+"Don't just look at the best case. Multiply"
+],
+[
+"Don't just trust the plan, see how long",
+"Don't just trust the plan. See how long"
+],
+[
+"What's spent is gone; only ask",
+"What's spent is gone. Only ask"
+],
+[
+"If independent, past results don't count; if the machine",
+"If each try is independent, past results don't count. If the machine"
+]
+];
+
+// ================= plain text pass: no dashes =================
+// Dashes read as machine-written. Runs last, over every player-visible string.
+// Quoted research (inside "…" in the source boxes) is left exactly as published.
+const CJK = /[一-鿿]/;
+function plainStr(s, keepQuotes) {
+  if (typeof s !== "string" || /^https?:/.test(s)) return s;
+  // in the research boxes, quoted lines from papers stay exactly as published
+  const keep = [];
+  if (keepQuotes) s = s.replace(/"[^"]*"|“[^”]*”/g, m => (keep.push(m), `\u0000${keep.length - 1}\u0000`));
+  if (!/[—–]| - /.test(s)) {} else if (CJK.test(s)) {
+    s = s.replace(/(\d)\s*[–-]\s*(\d)/g, "$1 到 $2").replace(/\s*——\s*|\s*—\s*|\s*–\s*/g, "，");
+    s = s.replace(/，+/g, "，").replace(/，([。！？」）])/g, "$1").replace(/^，/, "");
+  } else {
+    s = s.replace(/(\d)\s*–\s*(\d)/g, "$1 to $2").replace(/\s+[—–-]\s+|—|–/g, ", ");
+    s = s.replace(/(, )+/g, ", ").replace(/, ([.!?)])/g, "$1").replace(/^, /, "").replace(/\(, /g, "(");
+  }
+  if (typeof REWRITE !== "undefined") for (const [a, b] of REWRITE) if (s.includes(a)) s = s.split(a).join(b);
+  return s.replace(/\u0000(\d+)\u0000/g, (_, i) => keep[+i]);
+}
+const SKIP_KEYS = new Set(["url", "id", "kind", "theme", "go", "tool", "hair", "shirt", "hat", "beard", "npc", "pic"]);
+function plainDeep(o, keepQuotes = false, seen = new Set()) {
+  if (!o || typeof o !== "object" || seen.has(o)) return;
+  seen.add(o);
+  for (const k of Object.keys(o)) {
+    if (SKIP_KEYS.has(k)) continue;
+    if (typeof o[k] === "string") o[k] = plainStr(o[k], keepQuotes);
+    else plainDeep(o[k], keepQuotes, seen);
+  }
+}
+[CASE_BY_ID, EN, TWIST, HARD, AHA, REACT_MORE, UI, TOOLS, CHAPTERS, NPC].forEach(o => plainDeep(o));
+plainDeep(SOURCES, true);
 </script>
 <script>
 // ================= language =================
@@ -4024,7 +4802,7 @@ const reactions = {
   flood: ["……原来我只是被说法带着走了。", "对！救活 200 人，多好听！"],
   house: ["……好吧，你去验吧。我先帮你留着。", "签好了！恭喜！……下雨天记得放个盆。"],
 };
-Object.assign(reactions, REACT_MORE);
+Object.assign(reactions, REACT_MORE); plainDeep(reactions);
 function toolsGrid() { return `<div class="tools">${TOOLS.map(tl => { const [n, d] = toolT(tl); return tools.has(tl.id) ? `<div class="on"><b>${n}</b><br>${d}</div>` : `<div class="off">？？？</div>`; }).join("")}</div>`; }
 function endChapter() {
   const nxtId = ORDER[ORDER.indexOf(chap.id) + 1], justUnlocked = nxtId && townDone(chap.id) ? CHAPTERS.find(c => c.id === nxtId) : null;
@@ -4106,7 +4884,7 @@ function showProfile(back) {
       <div><span>${t("pLooked")}</span><b>${P.looked.toFixed(1)}</b><i>${t(P.looked >= 2 ? "pLookedHi" : "pLookedLo")}</i></div>
       <div><span>${t("pRash")}</span><b>${pct(P.rash)}</b><i>${t(P.rash >= .4 ? "pRashHi" : "pRashLo")}</i></div>
       <div><span>${t("pRight")}</span><b>${P.right} / ${P.n}</b><i>${t(P.right / P.n >= .6 ? "pRightHi" : "pRightLo")}</i></div>
-      <div><span>${t("pWeak")}</span><b>${P.weak ? P.weak[0] : "—"}</b><i>${P.weak ? t("pWeakN", { k: P.weak[1] }) : t("pNoWeak")}</i></div>
+      <div><span>${t("pWeak")}</span><b>${P.weak ? P.weak[0] : t("pNoWeak")}</b><i>${P.weak ? t("pWeakN", { k: P.weak[1] }) : t("pNoWeak")}</i></div>
     </div>
     <div class="types">${Object.entries(UI.types).map(([k, v]) => `<div class="${k === P.type ? "on" : ""}"><b>${tc(v.name)}</b><span>${tc(v.axis)}</span></div>`).join("")}</div>
     <p class="sub">${t("notHoroscope")}</p>
@@ -4155,7 +4933,7 @@ function drawCard(cv, P) {
     text(t(k), 44, y + 24, 22, "#f4e6c8");
     R(230, y + 6, 280, 22, "#15122a");
     if (v != null) R(230, y + 6, Math.max(4, Math.round(280 * v)), 22, col);
-    text(v == null ? "—" : Math.round(v * 100) + "", W - 44, y + 25, 20, "#a399c0", num, "right");
+    text(v == null ? "?" : Math.round(v * 100) + "", W - 44, y + 25, 20, "#a399c0", num, "right");
   });
   // moves and weakness, like a card's attacks
   let y = 690;
@@ -4479,6 +5257,7 @@ function intro() {
   showMap();
   openSheet(`${langRow()}<p class="sub">${t("tagline")}</p><h2>${t("title")}</h2>
     <div style="font-size:14.5px">${t("introText")}</div>
+    <p class="sub" style="margin-top:8px">${t("realNote")}</p>
     <button class="primary" id="best">${t("startBest")}</button>
     <div class="row2"><button class="ghost" id="howB">${t("tutTitle")}</button><button class="ghost" id="go">${t("seeMap")}</button></div>`);
   bindLang(intro);
