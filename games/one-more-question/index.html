@@ -3694,7 +3694,6 @@ function renderPanel() {
   if (mode === "review") return renderReview();
   if (c.lab) return renderLab();
   $panel.innerHTML = `
-    <div class="goal"><span>${t("youJudge")}</span>${c.verdict.q}</div>
     <div class="hint">${t("whatCheck")}</div>
     <div class="acts">${c.actions.map(a => {
       const done = st.done.has(a.id), can = !done && a.cost <= st.daysLeft && !st.walking;
